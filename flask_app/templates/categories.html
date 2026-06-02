@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% set active = 'categories' %}
+{% set title = 'Category Analysis' %}
+
+{% block content %}
+<div class="header">
+    <h1>🏷️ Category Deep Dive</h1>
+    <p>Product category performance, sub-categories, and return analysis</p>
+</div>
+
+<div class="charts">
+    <div class="chart-box full">
+        <div id="category-subcategory" style="height: 500px;"></div>
+    </div>
+    <div class="chart-box">
+        <div id="price-distribution" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box">
+        <div id="return-reasons" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box full">
+        <h3>📋 Category Performance Table</h3>
+        <div id="category-table"></div>
+    </div>
+</div>
+
+<script>
+async function loadCategory() {
+    // Category vs Sub-category (Stacked Bar)
+    const subcatData = await fetch('/api/category_subcategory').then(r => r.json());
+    const categories = [...new Set(subcatData.map(d => d.product_category))];
+    const traces = categories.map(cat => ({
+        x: subcatData.filter(d => d.product_category === cat).map(d => d.sub_category),
+        y: subcatData.filter(d => d.product_category === cat).map(d => d.revenue / 1000000),
+        name: cat,
+        type: 'bar'
+    }));
+    Plotly.newPlot('category-subcategory', traces, {
+        title: '💰 Revenue by Category & Sub-Category (₹ in Millions)',
+        barmode: 'group',
+        xaxis: { title: 'Sub-Category', tickangle: -45 },
+        yaxis: { title: 'Revenue (₹ Millions)' }
+    });
+
+    // Price Distribution
+    const priceData = await fetch('/api/category_price_distribution').then(r => r.json());
+    Plotly.newPlot('price-distribution', [
+        { x: priceData.map(d => d.product_category), y: priceData.map(d => d.avg_price), type: 'bar', name: 'Avg Price', marker: {color: '#667eea'} },
+        { x: priceData.map(d => d.product_category), y: priceData.map(d => d.avg_discount), type: 'scatter', mode: 'lines+markers', name: 'Avg Discount %', yaxis: 'y2', line: {color: '#f093fb', width: 3} }
+    ], {
+        title: '💲 Price & Discount by Category',
+        xaxis: { title: 'Category' },
+        yaxis: { title: 'Avg Price (₹)' },
+        yaxis2: { title: 'Discount %', overlaying: 'y', side: 'right' }
+    });
+
+    // Return Reasons
+    const returnData = await fetch('/api/return_reasons').then(r => r.json());
+    const reasons = [...new Set(returnData.map(d => d.return_reason))];
+    const returnTraces = reasons.map(reason => ({
+        x: returnData.filter(d => d.return_reason === reason).map(d => d.product_category),
+        y: returnData.filter(d => d.return_reason === reason).map(d => d.count),
+        name: reason,
+        type: 'bar'
+    }));
+    Plotly.newPlot('return-reasons', returnTraces, {
+        title: '🔄 Return Reasons by Category',
+        barmode: 'stack',
+        xaxis: { title: 'Category' },
+        yaxis: { title: 'Return Count' }
+    });
+
+    // Category Table
+    const catData = await fetch('/api/category_revenue').then(r => r.json());
+    document.getElementById('category-table').innerHTML = `
+        <table>
+            <tr><th>Category</th><th>Revenue (₹)</th><th>Orders</th><th>Avg Rating</th><th>Return Rate</th></tr>
+            ${catData.map(d => `
+                <tr>
+                    <td><strong>${d.product_category}</strong></td>
+                    <td>₹${(d.revenue / 1000000).toFixed(2)}M</td>
+                    <td>${d.orders.toLocaleString()}</td>
+                    <td>⭐ ${d.avg_rating}</td>
+                    <td>${d.return_rate}%</td>
+                </tr>
+            `).join('')}
+        </table>
+    `;
+}
+loadCategory();
+</script>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% set active = 'customers' %}
+{% set title = 'Customer Insights' %}
+
+{% block content %}
+<div class="header">
+    <h1>👥 Customer Behavior Analysis</h1>
+    <p>Segment performance, loyalty impact, ratings, and device usage</p>
+</div>
+
+<div class="charts">
+    <div class="chart-box full">
+        <div id="segment-analysis" style="height: 500px;"></div>
+    </div>
+    <div class="chart-box">
+        <div id="device-usage" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box">
+        <div id="rating-dist" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box">
+        <div id="loyalty-impact" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box">
+        <div id="segment-table-chart" style="height: 400px;"></div>
+    </div>
+</div>
+
+<script>
+async function loadCustomers() {
+    // Segment Analysis
+    const segData = await fetch('/api/segment_analysis').then(r => r.json());
+    Plotly.newPlot('segment-analysis', [
+        { x: segData.map(d => d.customer_segment), y: segData.map(d => d.revenue / 1000000), type: 'bar', name: 'Revenue (₹M)', marker: {color: '#667eea'} },
+        { x: segData.map(d => d.customer_segment), y: segData.map(d => d.aov), type: 'scatter', mode: 'lines+markers', name: 'AOV (₹)', yaxis: 'y2', line: {color: '#43e97b', width: 3} },
+        { x: segData.map(d => d.customer_segment), y: segData.map(d => d.return_rate), type: 'scatter', mode: 'lines+markers', name: 'Return Rate %', yaxis: 'y3', line: {color: '#ff6b6b', width: 3} }
+    ], {
+        title: '👥 Customer Segment Performance',
+        xaxis: { title: 'Segment' },
+        yaxis: { title: 'Revenue (₹ Millions)' },
+        yaxis2: { title: 'AOV (₹)', overlaying: 'y', side: 'right' },
+        yaxis3: { title: 'Return Rate %', overlaying: 'y', side: 'right', position: 0.9 }
+    });
+
+    // Device Usage
+    const deviceData = await fetch('/api/device_usage').then(r => r.json());
+    Plotly.newPlot('device-usage', [{
+        labels: deviceData.map(d => d.device_type),
+        values: deviceData.map(d => d.count),
+        type: 'pie',
+        marker: { colors: ['#667eea', '#764ba2', '#f093fb'] },
+        hole: 0.4
+    }], {
+        title: '📱 Device Type Distribution'
+    });
+
+    // Rating Distribution
+    const ratingData = await fetch('/api/rating_distribution').then(r => r.json());
+    Plotly.newPlot('rating-dist', [{
+        x: ratingData.map(d => d.rating),
+        y: ratingData.map(d => d.count),
+        type: 'bar',
+        marker: { color: ratingData.map(d => d.rating >= 4 ? '#43e97b' : d.rating >= 3 ? '#ffd93d' : '#ff6b6b') }
+    }], {
+        title: '⭐ Customer Rating Distribution',
+        xaxis: { title: 'Rating' },
+        yaxis: { title: 'Count' }
+    });
+
+    // Loyalty Impact
+    const loyaltyData = await fetch('/api/loyalty_analysis').then(r => r.json());
+    Plotly.newPlot('loyalty-impact', [
+        { x: loyaltyData.map(d => d.loyalty_member), y: loyaltyData.map(d => d.aov), type: 'bar', name: 'AOV (₹)', marker: {color: '#667eea'} },
+        { x: loyaltyData.map(d => d.loyalty_member), y: loyaltyData.map(d => d.return_rate), type: 'scatter', mode: 'markers', name: 'Return Rate %', yaxis: 'y2', marker: {color: '#ff6b6b', size: 15} }
+    ], {
+        title: '🎁 Loyalty Member Impact',
+        xaxis: { title: 'Loyalty Status' },
+        yaxis: { title: 'AOV (₹)' },
+        yaxis2: { title: 'Return Rate %', overlaying: 'y', side: 'right' }
+    });
+
+    // Segment Table
+    Plotly.newPlot('segment-table-chart', [{
+        x: segData.map(d => d.customer_segment),
+        y: segData.map(d => d.customers),
+        type: 'bar',
+        marker: { color: '#764ba2' },
+        text: segData.map(d => `${d.customers.toLocaleString()} customers`),
+        textposition: 'auto'
+    }], {
+        title: '👥 Customers by Segment',
+        xaxis: { title: 'Segment' },
+        yaxis: { title: 'Customer Count' }
+    });
+}
+loadCustomers();
+</script>
+{% endblock %}

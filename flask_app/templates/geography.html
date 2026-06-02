@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% set active = 'geography' %}
+{% set title = 'Geographic Analysis' %}
+
+{% block content %}
+<div class="header">
+    <h1>📍 Geographic Performance</h1>
+    <p>State-wise revenue, delivery performance, and interstate commerce flow</p>
+</div>
+
+<div class="charts">
+    <div class="chart-box full">
+        <div id="state-revenue" style="height: 500px;"></div>
+    </div>
+    <div class="chart-box">
+        <div id="delivery-performance" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box">
+        <div id="return-by-state" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box full">
+        <h3>🚚 Top Interstate Commerce Routes</h3>
+        <div id="interstate-table"></div>
+    </div>
+</div>
+
+<script>
+async function loadGeography() {
+    const stateData = await fetch('/api/state_performance').then(r => r.json());
+
+    // State Revenue
+    Plotly.newPlot('state-revenue', [{
+        x: stateData.map(d => d.buyer_state),
+        y: stateData.map(d => d.revenue / 1000000),
+        type: 'bar',
+        marker: { color: stateData.map(d => d.revenue > 50000000 ? '#43e97b' : '#667eea') },
+        text: stateData.map(d => `₹${(d.revenue / 1000000).toFixed(2)}M | ${d.orders.toLocaleString()} orders`),
+        textposition: 'auto'
+    }], {
+        title: '💰 Revenue by State (₹ in Millions)',
+        xaxis: { title: 'State' },
+        yaxis: { title: 'Revenue (₹ Millions)' }
+    });
+
+    // Delivery Performance
+    Plotly.newPlot('delivery-performance', [
+        { x: stateData.map(d => d.buyer_state), y: stateData.map(d => d.on_time_pct), type: 'bar', name: 'On-Time %', marker: {color: '#43e97b'} },
+        { x: stateData.map(d => d.buyer_state), y: stateData.map(d => d.avg_delivery_days), type: 'scatter', mode: 'lines+markers', name: 'Avg Days', yaxis: 'y2', line: {color: '#f093fb', width: 3} }
+    ], {
+        title: '🚚 Delivery Performance by State',
+        xaxis: { title: 'State' },
+        yaxis: { title: 'On-Time %', range: [0, 100] },
+        yaxis2: { title: 'Avg Delivery Days', overlaying: 'y', side: 'right' }
+    });
+
+    // Return by State
+    Plotly.newPlot('return-by-state', [{
+        x: stateData.map(d => d.buyer_state),
+        y: stateData.map(d => d.return_rate),
+        type: 'bar',
+        marker: { color: stateData.map(d => d.return_rate > 20 ? '#ff6b6b' : '#667eea') }
+    }], {
+        title: '🔄 Return Rate by State (%)',
+        xaxis: { title: 'State' },
+        yaxis: { title: 'Return Rate %' }
+    });
+
+    // Interstate Flow
+    const flowData = await fetch('/api/interstate_flow').then(r => r.json());
+    document.getElementById('interstate-table').innerHTML = `
+        <table>
+            <tr><th>Buyer State</th><th>Seller State</th><th>Transactions</th><th>Revenue (₹)</th><th>Avg Delivery Days</th></tr>
+            ${flowData.map(d => `
+                <tr>
+                    <td>${d.buyer_state}</td>
+                    <td>${d.seller_state}</td>
+                    <td>${d.transactions.toLocaleString()}</td>
+                    <td>₹${(d.revenue / 1000000).toFixed(2)}M</td>
+                    <td>${d.avg_delivery_days} days</td>
+                </tr>
+            `).join('')}
+        </table>
+    `;
+}
+loadGeography();
+</script>
+{% endblock %}

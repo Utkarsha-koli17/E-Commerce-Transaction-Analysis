@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% set active = 'payments' %}
+{% set title = 'Payment Analysis' %}
+
+{% block content %}
+<div class="header">
+    <h1>💳 Payment Mode Analysis</h1>
+    <p>Payment preferences, COD vs UPI adoption, and segment-wise patterns</p>
+</div>
+
+<div class="charts">
+    <div class="chart-box">
+        <div id="payment-pie" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box">
+        <div id="payment-return" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box full">
+        <div id="payment-by-state" style="height: 500px;"></div>
+    </div>
+    <div class="chart-box full">
+        <div id="payment-by-segment" style="height: 400px;"></div>
+    </div>
+</div>
+
+<script>
+async function loadPayments() {
+    const payData = await fetch('/api/payment_distribution').then(r => r.json());
+
+    // Payment Pie
+    Plotly.newPlot('payment-pie', [{
+        labels: payData.map(d => d.payment_mode),
+        values: payData.map(d => d.percentage),
+        type: 'pie',
+        marker: { colors: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#ffd93d'] },
+        textinfo: 'label+percent',
+        hole: 0.4
+    }], {
+        title: '💳 Payment Mode Distribution'
+    });
+
+    // Return Rate by Payment
+    Plotly.newPlot('payment-return', [{
+        x: payData.map(d => d.payment_mode),
+        y: payData.map(d => d.return_rate),
+        type: 'bar',
+        marker: { color: payData.map(d => d.return_rate > 20 ? '#ff6b6b' : '#667eea') },
+        text: payData.map(d => `${d.return_rate}%`),
+        textposition: 'auto'
+    }], {
+        title: '🔄 Return Rate by Payment Mode (%)',
+        xaxis: { title: 'Payment Mode' },
+        yaxis: { title: 'Return Rate %' }
+    });
+
+    // Payment by State (Stacked)
+    const statePayData = await fetch('/api/payment_by_state').then(r => r.json());
+    const states = [...new Set(statePayData.map(d => d.buyer_state))];
+    const modes = [...new Set(statePayData.map(d => d.payment_mode))];
+    const stateTraces = modes.map(mode => ({
+        x: states,
+        y: states.map(state => {
+            const item = statePayData.find(d => d.buyer_state === state && d.payment_mode === mode);
+            return item ? item.count : 0;
+        }),
+        name: mode,
+        type: 'bar'
+    }));
+    Plotly.newPlot('payment-by-state', stateTraces, {
+        title: '💳 Payment Mode Preference by State',
+        barmode: 'stack',
+        xaxis: { title: 'State' },
+        yaxis: { title: 'Transaction Count' }
+    });
+
+    // Payment by Segment
+    const segPayData = await fetch('/api/payment_by_segment').then(r => r.json());
+    const segments = [...new Set(segPayData.map(d => d.customer_segment))];
+    const segTraces = modes.map(mode => ({
+        x: segments,
+        y: segments.map(seg => {
+            const item = segPayData.find(d => d.customer_segment === seg && d.payment_mode === mode);
+            return item ? item.count : 0;
+        }),
+        name: mode,
+        type: 'bar'
+    }));
+    Plotly.newPlot('payment-by-segment', segTraces, {
+        title: '💳 Payment Mode by Customer Segment',
+        barmode: 'stack',
+        xaxis: { title: 'Segment' },
+        yaxis: { title: 'Transaction Count' }
+    });
+}
+loadPayments();
+</script>
+{% endblock %}

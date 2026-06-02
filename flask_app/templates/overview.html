@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% set active = 'overview' %}
+{% set title = 'Overview' %}
+
+{% block content %}
+<div class="header">
+    <h1>📊 Business Overview Dashboard</h1>
+    <p>Real-time insights from 1M+ transactions | Powered by Kafka, Spark & PostgreSQL</p>
+</div>
+
+<div class="cards" id="summary-cards">Loading...</div>
+
+<div class="charts">
+    <div class="chart-box">
+        <div id="category-revenue" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box">
+        <div id="monthly-trend" style="height: 400px;"></div>
+    </div>
+</div>
+
+<script>
+async function loadDashboard() {
+    // Summary Cards
+    const summary = await fetch('/api/summary').then(r => r.json());
+    document.getElementById('summary-cards').innerHTML = `
+        <div class="card"><h3>Total Orders</h3><div class="value">${summary.total_orders.toLocaleString()}</div><div class="label">Transactions</div></div>
+        <div class="card"><h3>Revenue</h3><div class="value">₹${(summary.total_revenue / 10000000).toFixed(2)} Cr</div><div class="label">Total Sales</div></div>
+        <div class="card"><h3>Customers</h3><div class="value">${summary.unique_customers.toLocaleString()}</div><div class="label">Unique Users</div></div>
+        <div class="card"><h3>Avg Order</h3><div class="value">₹${summary.avg_order_value.toFixed(0)}</div><div class="label">Per Order</div></div>
+        <div class="card"><h3>Return Rate</h3><div class="value">${summary.return_rate}%</div><div class="label">Of Orders</div></div>
+        <div class="card"><h3>On-Time</h3><div class="value">${summary.on_time_delivery}%</div><div class="label">Delivery</div></div>
+    `;
+
+    // Category Revenue
+    const catData = await fetch('/api/category_revenue').then(r => r.json());
+    Plotly.newPlot('category-revenue', [{
+        x: catData.map(d => d.product_category),
+        y: catData.map(d => d.revenue / 1000000),
+        type: 'bar',
+        marker: { color: catData.map((_, i) => `hsl(${i * 40}, 70%, 60%)`) }
+    }], {
+        title: '💰 Revenue by Category (₹ in Millions)',
+        xaxis: { title: 'Category' },
+        yaxis: { title: 'Revenue (₹ Millions)' }
+    });
+
+    // Monthly Trend
+    const trendData = await fetch('/api/monthly_revenue').then(r => r.json());
+    Plotly.newPlot('monthly-trend', [{
+        x: trendData.map(d => `${d.transaction_year}-${String(d.transaction_month).padStart(2, '0')}`),
+        y: trendData.map(d => d.revenue / 1000000),
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: { color: '#667eea', width: 3 },
+        fill: 'tozeroy',
+        fillcolor: 'rgba(102, 126, 234, 0.1)'
+    }], {
+        title: '📈 Monthly Revenue Trend',
+        xaxis: { title: 'Month', tickangle: -45 },
+        yaxis: { title: 'Revenue (₹ Millions)' }
+    });
+}
+loadDashboard();
+</script>
+{% endblock %}

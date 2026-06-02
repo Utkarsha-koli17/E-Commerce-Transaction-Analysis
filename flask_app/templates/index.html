@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Indian E-Commerce Analytics</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; padding: 20px; margin: 0; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 2.5em; }
+        .header p { margin: 10px 0 0; opacity: 0.9; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: white; padding: 25px; border-radius: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        .card h3 { margin: 0; color: #667eea; font-size: 0.9em; text-transform: uppercase; }
+        .card .value { font-size: 2.5em; font-weight: bold; color: #333; margin: 10px 0; }
+        .card .label { color: #999; font-size: 0.85em; }
+        .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 20px; }
+        .chart-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛒 Indian E-Commerce Analytics</h1>
+        <p>Powered by Kafka, Spark, and PostgreSQL | 1M+ Transactions Analyzed</p>
+    </div>
+
+    <div class="cards" id="summary-cards">Loading...</div>
+    
+    <div class="charts">
+        <div class="chart-box"><div id="cat-chart"></div></div>
+        <div class="chart-box"><div id="state-chart"></div></div>
+        <div class="chart-box"><div id="payment-chart"></div></div>
+        <div class="chart-box"><div id="trend-chart"></div></div>
+    </div>
+
+    <script>
+        async function loadDashboard() {
+            const summary = await fetch('/api/summary').then(r => r.json());
+            document.getElementById('summary-cards').innerHTML = `
+                <div class="card">
+                    <h3>Total Orders</h3>
+                    <div class="value">${summary.total_orders.toLocaleString()}</div>
+                    <div class="label">Transactions</div>
+                </div>
+                <div class="card">
+                    <h3>Total Revenue</h3>
+                    <div class="value">₹${(summary.total_revenue / 10000000).toFixed(2)} Cr</div>
+                    <div class="label">Sales Volume</div>
+                </div>
+                <div class="card">
+                    <h3>Avg Order Value</h3>
+                    <div class="value">₹${summary.avg_order_value.toFixed(0)}</div>
+                    <div class="label">Per Order</div>
+                </div>
+                <div class="card">
+                    <h3>Return Rate</h3>
+                    <div class="value">${summary.return_rate}%</div>
+                    <div class="label">Of Orders</div>
+                </div>
+            `;
+
+            const catData = await fetch('/api/revenue_by_category').then(r => r.json());
+            Plotly.newPlot('cat-chart', [{
+                x: catData.map(d => d.category),
+                y: catData.map(d => d.revenue / 1000000),
+                type: 'bar',
+                marker: {color: '#667eea'}
+            }], {
+                title: '💰 Revenue by Category (₹ in Millions)',
+                xaxis: {title: 'Category'},
+                yaxis: {title: 'Revenue (₹ Millions)'}
+            });
+
+            const stateData = await fetch('/api/revenue_by_state').then(r => r.json());
+            Plotly.newPlot('state-chart', [{
+                x: stateData.map(d => d.state),
+                y: stateData.map(d => d.revenue / 1000000),
+                type: 'bar',
+                marker: {color: '#764ba2'}
+            }], {
+                title: '📍 Top 10 States by Revenue (₹ in Millions)',
+                xaxis: {title: 'State'},
+                yaxis: {title: 'Revenue (₹ Millions)'}
+            });
+
+            const payData = await fetch('/api/payment_modes').then(r => r.json());
+            Plotly.newPlot('payment-chart', [{
+                labels: payData.map(d => d.mode),
+                values: payData.map(d => d.count),
+                type: 'pie',
+                marker: {colors: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b']}
+            }], {
+                title: '💳 Payment Mode Distribution'
+            });
+
+            const trendData = await fetch('/api/monthly_trend').then(r => r.json());
+            Plotly.newPlot('trend-chart', [{
+                x: trendData.map(d => `${d.year}-${String(d.month).padStart(2, '0')}`),
+                y: trendData.map(d => d.revenue / 1000000),
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: {color: '#667eea', width: 3},
+                marker: {size: 8}
+            }], {
+                title: '📈 Monthly Revenue Trend',
+                xaxis: {title: 'Month'},
+                yaxis: {title: 'Revenue (₹ Millions)'}
+            });
+        }
+        loadDashboard();
+    </script>
+</body>
+</html>

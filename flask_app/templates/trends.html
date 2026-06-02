@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% set active = 'trends' %}
+{% set title = 'Time Series Analysis' %}
+
+{% block content %}
+<div class="header">
+    <h1>📈 Time Series & Seasonality</h1>
+    <p>Year-over-year growth, seasonal patterns, and category trends</p>
+</div>
+
+<div class="charts">
+    <div class="chart-box">
+        <div id="yearly-comparison" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box">
+        <div id="day-of-week" style="height: 400px;"></div>
+    </div>
+    <div class="chart-box full">
+        <div id="category-trends" style="height: 500px;"></div>
+    </div>
+    <div class="chart-box full">
+        <div id="monthly-revenue" style="height: 400px;"></div>
+    </div>
+</div>
+
+<script>
+async function loadTrends() {
+    // Yearly Comparison
+    const yearlyData = await fetch('/api/yearly_comparison').then(r => r.json());
+    Plotly.newPlot('yearly-comparison', [
+        { x: yearlyData.map(d => d.transaction_year), y: yearlyData.map(d => d.revenue / 1000000), type: 'bar', name: 'Revenue (₹M)', marker: {color: '#667eea'} },
+        { x: yearlyData.map(d => d.transaction_year), y: yearlyData.map(d => d.return_rate), type: 'scatter', mode: 'lines+markers', name: 'Return Rate %', yaxis: 'y2', line: {color: '#ff6b6b', width: 3} }
+    ], {
+        title: '📊 Year-over-Year Performance',
+        xaxis: { title: 'Year' },
+        yaxis: { title: 'Revenue (₹ Millions)' },
+        yaxis2: { title: 'Return Rate %', overlaying: 'y', side: 'right' }
+    });
+
+    // Day of Week
+    const dowData = await fetch('/api/day_of_week').then(r => r.json());
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    Plotly.newPlot('day-of-week', [{
+        x: dowData.map(d => days[d.day_of_week - 1]),
+        y: dowData.map(d => d.orders),
+        type: 'bar',
+        marker: { color: '#764ba2' }
+    }], {
+        title: '📅 Orders by Day of Week',
+        xaxis: { title: 'Day' },
+        yaxis: { title: 'Order Count' }
+    });
+
+    // Category Trends
+    const catTrendData = await fetch('/api/category_trends').then(r => r.json());
+    const categories = [...new Set(catTrendData.map(d => d.product_category))];
+    const catTraces = categories.map(cat => {
+        const catData = catTrendData.filter(d => d.product_category === cat);
+        return {
+            x: catData.map(d => `${d.transaction_year}-${String(d.transaction_month).padStart(2, '0')}`),
+            y: catData.map(d => d.revenue / 1000000),
+            name: cat,
+            type: 'scatter',
+            mode: 'lines+markers'
+        };
+    });
+    Plotly.newPlot('category-trends', catTraces, {
+        title: '📈 Revenue Trends by Category (₹ in Millions)',
+        xaxis: { title: 'Month', tickangle: -45 },
+        yaxis: { title: 'Revenue (₹ Millions)' }
+    });
+
+    // Monthly Revenue
+    const monthlyData = await fetch('/api/monthly_revenue').then(r => r.json());
+    Plotly.newPlot('monthly-revenue', [{
+        x: monthlyData.map(d => `${d.transaction_year}-${String(d.transaction_month).padStart(2, '0')}`),
+        y: monthlyData.map(d => d.revenue / 1000000),
+        type: 'scatter',
+        mode: 'lines+markers',
+        fill: 'tozeroy',
+        fillcolor: 'rgba(102, 126, 234, 0.1)',
+        line: { color: '#667eea', width: 3 }
+    }], {
+        title: '💰 Overall Monthly Revenue Trend',
+        xaxis: { title: 'Month', tickangle: -45 },
+        yaxis: { title: 'Revenue (₹ Millions)' }
+    });
+}
+loadTrends();
+</script>
+{% endblock %}
