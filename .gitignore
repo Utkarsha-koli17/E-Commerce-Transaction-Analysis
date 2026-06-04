@@ -23,3 +23,7 @@ Thumbs.db
 
 # Checkpoint files
 /tmp/spark-checkpoint*
+data/*.csv
+venv/
+__pycache__/
+*.pyc
