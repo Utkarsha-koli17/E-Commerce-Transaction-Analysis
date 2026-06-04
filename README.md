@@ -217,14 +217,14 @@ chmod +x run_full_pipeline.sh
 **Group 12 – Big Data Analytics Project**  
 *PG-DBDA, C-DAC Kharghar, Navi Mumbai*
 
-| Name | Role |
-| :--- | :--- |
-| **Piyush Shinde** | Project Lead & Full Stack Data Engineer |
-| **Payal Waghela** | Data Analyst & Dashboard Developer |
-| **Abhishek Mohile** | Big Data Engineer (Spark & Kafka) |
-| **Utkarsha Koli** | Database Administrator (PostgreSQL) |
-| **Lokesh Bhoge** | DevOps & Cloud Engineer (Docker/Airflow) |
-| **Simran Gulakari** | QA & Documentation Specialist |
+| Team Members | 
+| :--- | 
+| **Piyush Shinde** |
+| **Payal Waghela** |
+| **Abhishek Mohile** |
+| **Utkarsha Koli** |
+| **Lokesh Bhoge** | 
+| **Simran Gulakari** | 
 
 ---
 
@@ -233,4 +233,3 @@ chmod +x run_full_pipeline.sh
 This project is developed for **educational and academic purposes** as part of the PG-DBDA course at C-DAC. 
 
 © 2024 Group 12. All rights reserved.
-```
