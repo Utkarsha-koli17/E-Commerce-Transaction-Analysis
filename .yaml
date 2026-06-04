@@ -1,0 +1,214 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres_db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: metastore
+      POSTGRES_USER: bigdata
+      POSTGRES_PASSWORD: bigdata123
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bigdata-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bigdata -d metastore"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Hadoop NameNode
+  hadoop_namenode:
+    image: apache/hadoop:3.3.6
+    container_name: hadoop_namenode
+    environment:
+      - CLUSTER_NAME=ecommerce-cluster
+    ports:
+      - "9870:9870"
+      - "9000:9000"
+    volumes:
+      - hadoop_namenode_data:/hadoop/dfs/name
+    networks:
+      - bigdata-net
+    command: ["namenode"]
+
+  # Hadoop DataNode
+  hadoop_datanode:
+    image: apache/hadoop:3.3.6
+    container_name: hadoop_datanode
+    environment:
+      - CLUSTER_NAME=ecommerce-cluster
+      - SERVICE_PRECONDITION=hadoop_namenode:9870
+    ports:
+      - "9864:9864"
+    volumes:
+      - hadoop_datanode_data:/hadoop/dfs/data
+    networks:
+      - bigdata-net
+    depends_on:
+      - hadoop_namenode
+    command: ["datanode"]
+
+  # Apache Kafka
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - bigdata-net
+    depends_on:
+      - zookeeper
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+
+  # Zookeeper (required for Kafka)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - bigdata-net
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+
+  # Apache Spark Master
+  spark_master:
+    image: apache/spark:3.1.1
+    container_name: spark_master
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    environment:
+      - SPARK_MASTER_HOST=spark_master
+      - SPARK_MASTER_PORT=7077
+    networks:
+      - bigdata-net
+    volumes:
+      - ./scripts/spark_etl.py:/opt/spark_etl.py
+      - spark_logs:/opt/spark/logs
+
+  # Apache Spark Worker
+  spark_worker:
+    image: apache/spark:3.1.1
+    container_name: spark_worker
+    ports:
+      - "8081:8081"
+    environment:
+      - SPARK_MASTER=spark://spark_master:7077
+      - SPARK_WORKER_CORES=4
+      - SPARK_WORKER_MEMORY=4g
+    networks:
+      - bigdata-net
+    depends_on:
+      - spark_master
+    volumes:
+      - ./scripts/spark_etl.py:/opt/spark_etl.py
+      - spark_logs:/opt/spark/logs
+
+  # Apache Airflow Webserver
+  airflow_webserver:
+    image: apache/airflow:2.8.1
+    container_name: airflow_webserver
+    ports:
+      - "8088:8080"
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow_postgres:5432/airflow
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY:-YourFernetKeyHere12345678901234567890123456789012}
+      - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=true
+      - AIRFLOW__CORE__LOAD_EXAMPLES=false
+      - AIRFLOW__API__AUTH_BACKENDS=airflow.api.auth.backend.basic_auth
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - airflow_logs:/opt/airflow/logs
+      - airflow_plugins:/opt/airflow/plugins
+    networks:
+      - bigdata-net
+    depends_on:
+      - airflow_postgres
+    user: "${AIRFLOW_UID:-50000}:0"
+    command: webserver
+
+  # Apache Airflow Scheduler
+  airflow_scheduler:
+    image: apache/airflow:2.8.1
+    container_name: airflow_scheduler
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow_postgres:5432/airflow
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY:-YourFernetKeyHere12345678901234567890123456789012}
+      - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=true
+      - AIRFLOW__CORE__LOAD_EXAMPLES=false
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - airflow_logs:/opt/airflow/logs
+      - airflow_plugins:/opt/airflow/plugins
+    networks:
+      - bigdata-net
+    depends_on:
+      - airflow_postgres
+    user: "${AIRFLOW_UID:-50000}:0"
+    command: scheduler
+
+  # Airflow PostgreSQL (Metadata DB)
+  airflow_postgres:
+    image: postgres:13
+    container_name: airflow_postgres
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    networks:
+      - bigdata-net
+    volumes:
+      - airflow_postgres_data:/var/lib/postgresql/data
+
+  # Flask Dashboard (Optional)
+  flask_app:
+    build:
+      context: .
+      dockerfile: Dockerfile.flask
+    container_name: flask_dashboard
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://bigdata:bigdata123@postgres_db:5432/metastore
+    networks:
+      - bigdata-net
+    depends_on:
+      - postgres_db
+    volumes:
+      - ./flask_app:/app/flask_app
+
+networks:
+  bigdata-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  hadoop_namenode_data:
+  hadoop_datanode_data:
+  kafka_data:
+  zookeeper_data:
+  spark_logs:
+  airflow_logs:
+  airflow_plugins:
+  airflow_postgres_data:
