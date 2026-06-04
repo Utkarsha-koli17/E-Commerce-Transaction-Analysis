@@ -202,34 +202,4 @@ chmod +x run_full_pipeline.sh
 
 ---
 
-## 📌 Future Enhancements
 
-* **Cloud Integration:** Migrate storage to AWS S3 / Azure Data Lake.
-* **Real-Time Updates:** Implement WebSockets for live dashboard data streaming.
-* **Machine Learning:** Integrate a Recommendation Engine and Customer Churn Prediction models.
-* **CI/CD Pipeline:** Automate testing and deployment using GitHub Actions.
-* **Kubernetes Scaling:** Migrate from Docker Compose to Kubernetes for enterprise-grade horizontal scaling.
-
----
-
-## 👨‍💻 Team
-
-**Group 12 – Big Data Analytics Project**  
-*PG-DBDA, C-DAC Kharghar, Navi Mumbai*
-
-| Team Members | 
-| :--- | 
-| **Piyush Shinde** |
-| **Payal Waghela** |
-| **Abhishek Mohile** |
-| **Utkarsha Koli** |
-| **Lokesh Bhoge** | 
-| **Simran Gulakari** | 
-
----
-
-## 📜 License
-
-This project is developed for **educational and academic purposes** as part of the PG-DBDA course at C-DAC. 
-
-© 2024 Group 12. All rights reserved.
