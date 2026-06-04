@@ -32,30 +32,7 @@ The pipeline ingests raw transaction data, processes and cleans it in real time,
 
 ## 🏗️ System Architecture
 
-```text
-CSV Dataset
-    │
-    ▼
-Kafka Producer
-    │
-    ▼
-Kafka Topic (ecommerce-transactions)
-    │
-    ▼
-Spark Structured Streaming (ETL)
-    │
-    ▼
-Data Cleaning & Feature Engineering
-    │
-    ▼
-PostgreSQL Database
-    │
-    ▼
-Flask API Layer
-    │
-    ▼
-Analytics Dashboard
-```
+![AR](AR.jpeg)
 
 ---
 
