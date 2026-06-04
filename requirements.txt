@@ -1,26 +1,67 @@
-# Apache Spark
-pyspark==3.1.1
+## Requirements
 
-# Kafka
-kafka-python==2.0.2
+This project requires Python 3.9+ and the following dependencies:
 
-# Database
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### requirements.txt
+
+```text
+Flask==3.0.0
+Flask-Cors==4.0.0
 psycopg2-binary==2.9.9
-
-# Web Framework
-flask==3.0.0
-flask-cors==4.0.0
-
-# Data Processing
+pyspark==3.1.1
+kafka-python==2.0.2
 pandas==2.1.0
 numpy==1.24.0
-
-# Visualization
 plotly==5.18.0
-
-# Utilities
 python-dotenv==1.0.0
 requests==2.31.0
-
-# Testing
 pytest==7.4.0
+```
+
+### Dependency Overview
+
+| Category             | Libraries               | Purpose                                 |
+| -------------------- | ----------------------- | --------------------------------------- |
+| Web Framework        | Flask, Flask-Cors       | REST API and dashboard backend          |
+| Database             | psycopg2-binary         | PostgreSQL connectivity                 |
+| Big Data & Streaming | PySpark, kafka-python   | Data processing and Kafka integration   |
+| Data Processing      | Pandas, NumPy           | Data manipulation and analytics         |
+| Visualization        | Plotly                  | Interactive charts and dashboards       |
+| Utilities            | python-dotenv, requests | Environment management and API requests |
+| Testing              | pytest                  | Unit and integration testing            |
+
+````
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone <https://github.com/piyush9786/ecommerce-bigdata-pipeline>
+cd <ecommerce-bigdata-pipeline>
+````
+
+2. Create a virtual environment:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+3. Install required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Verify installation:
+
+```bash
+pip list
+```
