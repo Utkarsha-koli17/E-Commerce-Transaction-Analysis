@@ -205,9 +205,7 @@ docker-compose up -d
 
 * Kafka Consumer Lag
 * Schema Consistency Management
-* Spark-PostgreSQL JDBC Integration
 * Handling Missing Data
-* Docker Service Orchestration
 
 ---
 
