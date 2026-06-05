@@ -1,27 +1,144 @@
+```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Commerce Big Data Analytics Pipeline</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+        }
+
+        header{
+            background:#0f172a;
+            color:white;
+            text-align:center;
+            padding:40px;
+        }
+
+        header h1{
+            font-size:2.5rem;
+        }
+
+        header p{
+            margin-top:10px;
+            color:#cbd5e1;
+        }
+
+        .container{
+            max-width:1200px;
+            margin:auto;
+            padding:40px 20px;
+        }
+
+        h2{
+            margin-bottom:20px;
+            color:#0f172a;
+        }
+
+        .reports{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+            gap:20px;
+        }
+
+        .card{
+            background:white;
+            border-radius:12px;
+            padding:25px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-5px);
+        }
+
+        .card h3{
+            color:#1e293b;
+            margin-bottom:10px;
+        }
+
+        .btn{
+            display:inline-block;
+            margin-top:15px;
+            background:#2563eb;
+            color:white;
+            padding:10px 15px;
+            border-radius:6px;
+            text-decoration:none;
+        }
+
+        footer{
+            text-align:center;
+            padding:20px;
+            background:#0f172a;
+            color:white;
+            margin-top:40px;
+        }
+    </style>
 </head>
+
 <body>
 
+<header>
     <h1>E-Commerce Big Data Analytics Pipeline</h1>
+    <p>Big Data Analytics using Hadoop, Spark, Hive, Kafka & Flask Dashboard</p>
+</header>
 
-    <h2>Reports</h2>
+<div class="container">
 
-    <ul>
-        <li><a href="screenshots/Overview%20-%20E-Commerce%20Analytics.pdf" target="_blank">Overview Analysis</a></li>
+    <h2>Analytics Reports</h2>
 
-        <li><a href="screenshots/Category%20Analysis%20-%20E-Commerce%20Analytics.pdf" target="_blank">Category Analysis</a></li>
+    <div class="reports">
 
-        <li><a href="screenshots/Customer%20Insights%20-%20E-Commerce%20Analytics.pdf" target="_blank">Customer Insights</a></li>
+        <div class="card">
+            <h3>Overview Analysis</h3>
+            <a class="btn" href="screenshots/Overview%20-%20E-Commerce%20Analytics.pdf" target="_blank">View Report</a>
+        </div>
 
-        <li><a href="screenshots/Geographic%20Analysis%20-%20E-Commerce%20Analytics.pdf" target="_blank">Geographic Analysis</a></li>
+        <div class="card">
+            <h3>Category Analysis</h3>
+            <a class="btn" href="screenshots/Category%20Analysis%20-%20E-Commerce%20Analytics.pdf" target="_blank">View Report</a>
+        </div>
 
-        <li><a href="screenshots/Payment%20Analysis%20-%20E-Commerce%20Analytics.pdf" target="_blank">Payment Analysis</a></li>
+        <div class="card">
+            <h3>Customer Insights</h3>
+            <a class="btn" href="screenshots/Customer%20Insights%20-%20E-Commerce%20Analytics.pdf" target="_blank">View Report</a>
+        </div>
 
-        <li><a href="screenshots/Time%20Series%20Analysis%20-%20E-Commerce%20Analytics.pdf" target="_blank">Time Series Analysis</a></li>
-    </ul>
+        <div class="card">
+            <h3>Geographic Analysis</h3>
+            <a class="btn" href="screenshots/Geographic%20Analysis%20-%20E-Commerce%20Analytics.pdf" target="_blank">View Report</a>
+        </div>
+
+        <div class="card">
+            <h3>Payment Analysis</h3>
+            <a class="btn" href="screenshots/Payment%20Analysis%20-%20E-Commerce%20Analytics.pdf" target="_blank">View Report</a>
+        </div>
+
+        <div class="card">
+            <h3>Time Series Analysis</h3>
+            <a class="btn" href="screenshots/Time%20Series%20Analysis%20-%20E-Commerce%20Analytics.pdf" target="_blank">View Report</a>
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    © 2026 E-Commerce Big Data Analytics Pipeline | Developed by Piyush Shinde
+</footer>
 
 </body>
 </html>
+```
