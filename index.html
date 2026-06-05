@@ -36,7 +36,7 @@ nav{
   display:flex;
   justify-content:center;
   gap:18px;
-  padding:12px 10px;
+  padding:12px;
   background:rgba(0,0,0,0.4);
   backdrop-filter:blur(14px);
   border-bottom:1px solid var(--border);
@@ -47,23 +47,21 @@ nav a{
   color:var(--muted);
   text-decoration:none;
   font-size:14px;
-  transition:0.3s;
 }
 
 nav a:hover{
   color:white;
 }
 
-/* SECTION (NO GAPS FIX) */
+/* SECTIONS */
 section{
   min-height:100vh;
-  padding:90px 20px 40px;
+  padding:100px 20px 50px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   text-align:center;
-
   opacity:0;
   transform:translateY(40px);
   transition:all 0.8s ease;
@@ -83,46 +81,39 @@ h1{
   -webkit-text-fill-color:transparent;
 }
 
-p{
+.subtitle{
   color:var(--muted);
   max-width:800px;
+  margin-top:10px;
   line-height:1.6;
 }
 
-/* CARDS */
-.card{
-  width:85%;
-  max-width:1000px;
-  background:var(--card);
-  border:1px solid var(--border);
-  padding:18px;
-  border-radius:14px;
-  margin-top:12px;
-  backdrop-filter:blur(10px);
-  transition:0.3s;
-}
-
-.card:hover{
-  transform:scale(1.02);
-}
-
-/* METRICS */
-.grid{
+/* GLASS GRID */
+.glass-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
   width:85%;
   max-width:1000px;
+  margin-top:25px;
 }
 
-.metric{
+.glass-card{
   background:var(--card);
   border:1px solid var(--border);
-  padding:18px;
-  border-radius:14px;
+  padding:20px;
+  border-radius:16px;
+  backdrop-filter:blur(12px);
+  transition:0.3s;
+  position:relative;
 }
 
-.metric h2{
+.glass-card:hover{
+  transform:translateY(-5px);
+  border-color:var(--accent);
+}
+
+.glass-card h2{
   color:var(--accent);
   font-size:2rem;
 }
@@ -132,29 +123,47 @@ p{
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
-  gap:8px;
-  margin-top:10px;
+  gap:10px;
+  margin-top:20px;
 }
 
 .step{
-  padding:8px 14px;
+  padding:10px 14px;
+  border-radius:999px;
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:999px;
   font-size:13px;
+  transition:0.3s;
 }
 
-/* PDF VIEW */
+.step:hover{
+  transform:scale(1.1);
+  border-color:var(--accent);
+}
+
+/* CARDS */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:18px;
+  border-radius:14px;
+  margin-top:15px;
+  width:85%;
+  max-width:1000px;
+  backdrop-filter:blur(10px);
+}
+
+/* PDF */
 iframe{
   width:90%;
   height:85vh;
   border:none;
   border-radius:14px;
-  margin-top:12px;
+  margin-top:15px;
   box-shadow:0 10px 40px rgba(0,0,0,0.4);
 }
 
-/* SMALL TITLE */
+/* TITLE */
 h2{
   margin-bottom:10px;
 }
@@ -175,13 +184,38 @@ h2{
 <!-- HOME -->
 <section id="home" class="show">
   <h1>🚀 E-Commerce Big Data Pipeline</h1>
-  <p>
-    A distributed data engineering system built using Kafka, Spark, Airflow,
-    PostgreSQL, Flask and Docker to process millions of transactions and generate insights.
+  <p class="subtitle">
+    End-to-end distributed data engineering system using Kafka, Spark, Airflow,
+    PostgreSQL, Flask, and Docker to process large-scale e-commerce transactions.
   </p>
+</section>
 
-  <div class="card">
-    End-to-end system transforming raw e-commerce data into structured analytics using scalable distributed architecture.
+<!-- METRICS -->
+<section id="metrics">
+  <h2>📊 Key Metrics</h2>
+
+  <div class="glass-grid">
+
+    <div class="glass-card">
+      <h2>1.1M+</h2>
+      <p>Records Processed</p>
+    </div>
+
+    <div class="glass-card">
+      <h2>₹583 Cr</h2>
+      <p>Total Revenue</p>
+    </div>
+
+    <div class="glass-card">
+      <h2>441K+</h2>
+      <p>Customers</p>
+    </div>
+
+    <div class="glass-card">
+      <h2>30+</h2>
+      <p>ETL Rules</p>
+    </div>
+
   </div>
 </section>
 
@@ -190,8 +224,8 @@ h2{
   <h2>📌 Project Overview</h2>
 
   <div class="card">
-    This system processes large-scale transactional data in real time.
-    It ensures data ingestion, cleaning, transformation, storage, and visualization using a full Big Data pipeline.
+    This system processes large-scale e-commerce data in real time and converts raw streams
+    into structured analytics using Kafka, Spark, Airflow, PostgreSQL, and Flask.
   </div>
 </section>
 
@@ -210,19 +244,7 @@ h2{
   </div>
 
   <div class="card">
-    Real-time ingestion → distributed processing → orchestration → storage → API → visualization.
-  </div>
-</section>
-
-<!-- METRICS -->
-<section id="metrics">
-  <h2>📊 Key Metrics</h2>
-
-  <div class="grid">
-    <div class="metric"><h2>1.1M+</h2><p>Records</p></div>
-    <div class="metric"><h2>₹583 Cr</h2><p>Revenue</p></div>
-    <div class="metric"><h2>441K+</h2><p>Customers</p></div>
-    <div class="metric"><h2>30+</h2><p>ETL Rules</p></div>
+    Real-time ingestion → distributed processing → orchestration → storage → API → visualization
   </div>
 </section>
 
@@ -231,7 +253,7 @@ h2{
   <h2>📄 Analytics Reports</h2>
 
   <div class="card">
-    <h3>Overview Report</h3>
+    <h3>Overview</h3>
     <iframe src="screenshots/Overview%20-%20E-Commerce%20Analytics.pdf"></iframe>
   </div>
 
@@ -246,7 +268,7 @@ h2{
   </div>
 
   <div class="card">
-    <h3>Geography Analysis</h3>
+    <h3>Geographic Analysis</h3>
     <iframe src="screenshots/Geographic%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
   </div>
 
@@ -259,6 +281,7 @@ h2{
     <h3>Time Series Analysis</h3>
     <iframe src="screenshots/Time%20Series%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
   </div>
+
 </section>
 
 <script>
@@ -273,9 +296,7 @@ const observer = new IntersectionObserver(entries=>{
   });
 },{threshold:0.15});
 
-sections.forEach(sec=>{
-  observer.observe(sec);
-});
+sections.forEach(s=>observer.observe(s));
 </script>
 
 </body>
