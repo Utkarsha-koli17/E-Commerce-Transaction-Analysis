@@ -1,102 +1,152 @@
-```html id="liveweb1"
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>E-Commerce Big Data Analytics</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Commerce Analytics Dashboard</title>
 
 <style>
+    :root{
+        --bg:#0b1220;
+        --panel:#111a2e;
+        --card:#16223a;
+        --text:#e5e7eb;
+        --accent:#3b82f6;
+    }
+
     body{
-        font-family:Arial;
         margin:0;
-        background:#f4f6f9;
-    }
-
-    header{
-        background:#0f172a;
-        color:white;
-        padding:20px;
-        text-align:center;
-    }
-
-    nav{
+        font-family:Arial;
+        background:var(--bg);
+        color:var(--text);
         display:flex;
-        justify-content:center;
-        gap:15px;
-        background:#1e293b;
-        padding:10px;
-        flex-wrap:wrap;
     }
 
-    nav button{
-        padding:10px 15px;
-        border:none;
-        background:#2563eb;
-        color:white;
-        cursor:pointer;
-        border-radius:5px;
-    }
-
-    nav button:hover{
-        background:#1d4ed8;
-    }
-
-    .page{
-        display:none;
+    /* SIDEBAR */
+    .sidebar{
+        width:240px;
+        background:var(--panel);
+        height:100vh;
         padding:20px;
+        position:fixed;
     }
 
-    .active{
-        display:block;
+    .logo{
+        font-size:20px;
+        font-weight:bold;
+        margin-bottom:20px;
+        color:var(--accent);
+    }
+
+    .nav button{
+        width:100%;
+        padding:12px;
+        margin:5px 0;
+        background:transparent;
+        border:none;
+        color:var(--text);
+        text-align:left;
+        cursor:pointer;
+        border-radius:6px;
+        transition:0.3s;
+    }
+
+    .nav button:hover{
+        background:var(--card);
+    }
+
+    /* MAIN */
+    .main{
+        margin-left:260px;
+        padding:20px;
+        width:100%;
+    }
+
+    .header{
+        background:var(--panel);
+        padding:20px;
+        border-radius:10px;
+        margin-bottom:20px;
+    }
+
+    .grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+        gap:15px;
     }
 
     .card{
-        background:white;
+        background:var(--card);
         padding:15px;
-        margin:10px 0;
         border-radius:10px;
-        box-shadow:0 2px 10px rgba(0,0,0,0.1);
+        box-shadow:0 2px 10px rgba(0,0,0,0.3);
     }
 
     iframe{
         width:100%;
         height:600px;
         border:none;
+        border-radius:10px;
     }
 
-    a{
-        color:#2563eb;
-        text-decoration:none;
+    .page{ display:none; }
+    .active{ display:block; }
+
+    .kpi{
+        font-size:22px;
+        font-weight:bold;
+        color:var(--accent);
     }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>🚀 E-Commerce Big Data Analytics Pipeline</h1>
-    <p>Interactive Dashboard (Kafka + Spark + Airflow + Flask)</p>
-</header>
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="logo">📊 E-Commerce Analytics</div>
 
-<nav>
-    <button onclick="showPage('home')">Home</button>
-    <button onclick="showPage('overview')">Overview</button>
-    <button onclick="showPage('category')">Category</button>
-    <button onclick="showPage('customer')">Customer</button>
-    <button onclick="showPage('geo')">Geography</button>
-    <button onclick="showPage('payment')">Payment</button>
-    <button onclick="showPage('trend')">Trends</button>
-</nav>
+    <div class="nav">
+        <button onclick="show('home')">🏠 Home</button>
+        <button onclick="show('overview')">📊 Overview</button>
+        <button onclick="show('category')">🛒 Category</button>
+        <button onclick="show('customer')">👥 Customer</button>
+        <button onclick="show('geo')">🌍 Geography</button>
+        <button onclick="show('payment')">💳 Payment</button>
+        <button onclick="show('trend')">📈 Trends</button>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
 
 <!-- HOME -->
 <div id="home" class="page active">
-    <h2>📌 Project Overview</h2>
-    <div class="card">
-        End-to-End Big Data Pipeline using Kafka, Spark, Airflow, PostgreSQL & Flask.
+    <div class="header">
+        <h1>🚀 Big Data E-Commerce Pipeline</h1>
+        <p>Kafka • Spark • Airflow • PostgreSQL • Flask</p>
     </div>
 
-    <div class="card">
-        📊 Click navigation above to explore analytics dashboards.
+    <div class="grid">
+        <div class="card">
+            <div class="kpi">2M+</div>
+            <p>Records Processed</p>
+        </div>
+
+        <div class="card">
+            <div class="kpi">₹583 Cr</div>
+            <p>Total Revenue</p>
+        </div>
+
+        <div class="card">
+            <div class="kpi">441K</div>
+            <p>Customers</p>
+        </div>
+
+        <div class="card">
+            <div class="kpi">30+</div>
+            <p>ETL Rules</p>
+        </div>
     </div>
 </div>
 
@@ -118,7 +168,7 @@
     <iframe src="screenshots/Customer%20Insights%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
-<!-- GEOGRAPHY -->
+<!-- GEO -->
 <div id="geo" class="page">
     <h2>🌍 Geography Analysis</h2>
     <iframe src="screenshots/Geographic%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
@@ -136,16 +186,15 @@
     <iframe src="screenshots/Time%20Series%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
+</div>
+
 <script>
-function showPage(pageId){
-    let pages = document.getElementsByClassName("page");
-    for(let p of pages){
-        p.classList.remove("active");
-    }
-    document.getElementById(pageId).classList.add("active");
+function show(page){
+    let pages = document.querySelectorAll('.page');
+    pages.forEach(p => p.classList.remove('active'));
+    document.getElementById(page).classList.add('active');
 }
 </script>
 
 </body>
 </html>
-```
