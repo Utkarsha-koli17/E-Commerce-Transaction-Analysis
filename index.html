@@ -3,214 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-Commerce Big Data Project</title>
+<title>E-Commerce Big Data Analytics Pipeline</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-:root{
-  --bg:#0b1220;
-  --panel:#111a2e;
-  --card:#16223a;
-  --text:#e5e7eb;
-  --accent:#3b82f6;
+:root {
+    --bg:#0d1117;
+    --card:#161b22;
+    --text:#c9d1d9;
+    --muted:#8b949e;
+    --accent:#58a6ff;
+    --border:#30363d;
 }
 
-*{
-  margin:0;
-  padding:0;
-  font-family:Arial;
-  box-sizing:border-box;
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:system-ui;
 }
 
-body{
-  background:var(--bg);
-  color:var(--text);
+body {
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
 }
 
-/* NAV */
-nav{
-  position:fixed;
-  top:0;
-  width:100%;
-  background:var(--panel);
-  display:flex;
-  justify-content:space-between;
-  padding:15px 30px;
-  z-index:10;
+/* HEADER */
+header {
+    text-align:center;
+    padding:80px 20px;
+    border-bottom:1px solid var(--border);
+    animation:fadeIn 1s ease-in;
 }
 
-nav a{
-  color:var(--text);
-  margin:0 10px;
-  text-decoration:none;
+h1 {
+    font-size:2.5rem;
+    color:white;
 }
 
-/* SECTIONS */
-section{
-  padding:80px 20px;
-  max-width:1000px;
-  margin:auto;
+.tagline {
+    color:var(--muted);
+    margin-top:10px;
 }
 
-/* HERO */
-.hero{
-  text-align:center;
-  padding-top:120px;
+/* BUTTONS */
+.btn {
+    display:inline-block;
+    margin-top:15px;
+    padding:10px 18px;
+    border-radius:6px;
+    background:var(--accent);
+    color:white;
+    text-decoration:none;
+    transition:0.3s;
 }
 
-.hero h1{
-  font-size:32px;
-  color:var(--accent);
+.btn:hover {
+    transform:scale(1.05);
 }
 
-/* CARDS */
-.card{
-  background:var(--card);
-  padding:15px;
-  margin:10px 0;
-  border-radius:10px;
+/* CONTAINER */
+.container {
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px;
+/* SECTION */
+section {
+    padding:40px 0;
+    border-bottom:1px solid var(--border);
+    animation:fadeUp 0.8s ease-in;
+}
+
+h2 {
+    margin-bottom:15px;
+    color:white;
+}
+
+/* METRICS */
+.metrics {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+}
+
+.card {
+    background:var(--card);
+    padding:20px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    transition:0.3s;
+}
+
+.card:hover {
+    transform:translateY(-5px);
+}
+
+.value {
+    font-size:2rem;
+    color:var(--accent);
+    font-weight:bold;
 }
 
 /* FLOW */
-.flow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  justify-content:center;
+.flow {
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
 }
 
-.step{
-  background:var(--card);
-  padding:10px 15px;
-  border-radius:8px;
-  border:1px solid #2b3a5a;
+.step {
+    padding:10px 15px;
+    background:var(--card);
+    border-radius:8px;
+    border:1px solid var(--border);
 }
 
 /* CHART */
-canvas{
-  background:var(--card);
-  padding:10px;
-  border-radius:10px;
+canvas {
+    background:var(--card);
+    padding:15px;
+    border-radius:10px;
+    margin-top:10px;
+}
+
+/* FOOTER */
+footer {
+    text-align:center;
+    padding:30px;
+    color:var(--muted);
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from {opacity:0}
+    to {opacity:1}
+}
+
+@keyframes fadeUp {
+    from {opacity:0; transform:translateY(20px);}
+    to {opacity:1; transform:translateY(0);}
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
-<nav>
-  <div><b>🚀 Big Data Project</b></div>
-  <div>
-    <a href="#home">Home</a>
-    <a href="#flow">Pipeline</a>
-    <a href="#charts">Charts</a>
-    <a href="#insights">Insights</a>
-  </div>
-</nav>
+<header>
+    <h1>🚀 E-Commerce Big Data Analytics Pipeline</h1>
+    <p class="tagline">Kafka • Spark • Airflow • PostgreSQL • Docker • Flask</p>
+    <a class="btn" href="https://github.com/piyush9786/ecommerce-bigdata-pipeline">View GitHub Repo</a>
+</header>
 
-<!-- HOME -->
-<section id="home" class="hero">
-  <h1>E-Commerce Big Data Analytics Pipeline</h1>
-  <p>Kafka • Spark • Airflow • PostgreSQL • Flask • Docker</p>
+<div class="container">
 
-  <div class="card">
-    End-to-end system that processes 2M+ e-commerce transactions
-    and converts raw streaming data into business insights.
-  </div>
+<!-- OVERVIEW -->
+<section>
+    <h2>📌 Project Overview</h2>
+    <p>
+        This system processes large-scale e-commerce transactions using a distributed Big Data pipeline.
+        It transforms raw data into actionable insights using Kafka streaming, Spark ETL, Airflow orchestration,
+        PostgreSQL storage, and Flask dashboard visualization.
+    </p>
+</section>
+
+<!-- METRICS -->
+<section>
+    <h2>📊 Key Metrics</h2>
+    <div class="metrics">
+        <div class="card"><div class="value">1.1M+</div>Records Processed</div>
+        <div class="card"><div class="value">₹583 Cr</div>Total Revenue</div>
+        <div class="card"><div class="value">441K+</div>Customers</div>
+        <div class="card"><div class="value">30+</div>ETL Rules</div>
+    </div>
 </section>
 
 <!-- FLOW -->
-<section id="flow">
-  <h2>🧠 Project Flow</h2>
-
-  <div class="flow">
-    <div class="step">📥 Data Source</div>
-    <div class="step">📡 Kafka Streaming</div>
-    <div class="step">⚙ Spark ETL</div>
-    <div class="step">🧭 Airflow DAG</div>
-    <div class="step">🗄 PostgreSQL</div>
-    <div class="step">🌐 Flask API</div>
-    <div class="step">📊 Dashboard</div>
-  </div>
-
-  <div class="card">
-    Raw data is ingested → streamed via Kafka → processed using Spark →
-    orchestrated by Airflow → stored in PostgreSQL → exposed via Flask API →
-    visualized in dashboard.
-  </div>
+<section>
+    <h2>🏗️ Project Pipeline</h2>
+    <div class="flow">
+        <div class="step">Raw Data</div>
+        <div class="step">Kafka Streaming</div>
+        <div class="step">Spark ETL</div>
+        <div class="step">Airflow DAG</div>
+        <div class="step">PostgreSQL</div>
+        <div class="step">Flask API</div>
+        <div class="step">Dashboard</div>
+    </div>
 </section>
 
 <!-- CHARTS -->
-<section id="charts">
-  <h2>📊 Analytics Charts</h2>
+<section>
+    <h2>📈 Analytics Dashboard</h2>
 
-  <div class="grid">
-    <canvas id="c1"></canvas>
-    <canvas id="c2"></canvas>
-    <canvas id="c3"></canvas>
-  </div>
+    <canvas id="chart1"></canvas>
+    <canvas id="chart2"></canvas>
+    <canvas id="chart3"></canvas>
 </section>
 
 <!-- INSIGHTS -->
-<section id="insights">
-  <h2>🎯 Key Insights</h2>
-
-  <div class="card">
-    🔥 Electronics is the highest revenue-generating category
-  </div>
-
-  <div class="card">
-    📍 Maharashtra leads in total sales contribution
-  </div>
-
-  <div class="card">
-    💳 UPI is the fastest-growing payment method
-  </div>
-
-  <div class="card">
-    📈 Revenue shows consistent upward trend across months
-  </div>
+<section>
+    <h2>🎯 Key Insights</h2>
+    <div class="card">🔥 Electronics is top revenue generator</div>
+    <div class="card">📍 Maharashtra leads in sales</div>
+    <div class="card">💳 UPI dominates payments</div>
 </section>
 
+</div>
+
+<footer>
+    © Group 12 – C-DAC Kharghar | Big Data Project
+</footer>
+
 <script>
-/* Revenue */
-new Chart(document.getElementById("c1"), {
-  type:"bar",
-  data:{
-    labels:["Revenue","Orders","Customers"],
-    datasets:[{
-      data:[583,2000,441]
-    }]
-  }
+// Revenue Chart
+new Chart(document.getElementById("chart1"), {
+    type:'bar',
+    data:{
+        labels:["Revenue","Orders","Customers"],
+        datasets:[{
+            data:[583,2000,441]
+        }]
+    }
 });
 
-/* Category */
-new Chart(document.getElementById("c2"), {
-  type:"pie",
-  data:{
-    labels:["Electronics","Fashion","Home"],
-    datasets:[{
-      data:[38,25,37]
-    }]
-  }
+// Category Chart
+new Chart(document.getElementById("chart2"), {
+    type:'pie',
+    data:{
+        labels:["Electronics","Fashion","Home"],
+        datasets:[{
+            data:[38,25,37]
+        }]
+    }
 });
 
-/* Trends */
-new Chart(document.getElementById("c3"), {
-  type:"line",
-  data:{
-    labels:["Jan","Feb","Mar","Apr","May","Jun"],
-    datasets:[{
-      data:[50,80,120,200,300,450]
-    }]
-  }
+// Trend Chart
+new Chart(document.getElementById("chart3"), {
+    type:'line',
+    data:{
+        labels:["Jan","Feb","Mar","Apr","May","Jun"],
+        datasets:[{
+            data:[50,80,120,200,300,450]
+        }]
+    }
 });
 </script>
 
