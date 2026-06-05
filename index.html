@@ -84,9 +84,16 @@ body{
     align-items:center;
 }
 
-/* HOME CARDS */
+/* HOME */
 .home{
-    padding:20px;
+    padding:25px;
+}
+
+.card{
+    background:var(--card);
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
 }
 
 .grid{
@@ -95,26 +102,11 @@ body{
     gap:15px;
 }
 
-.card{
-    background:var(--card);
-    padding:15px;
-    border-radius:10px;
-}
-
-/* PDF VIEWER */
+/* PDF */
 iframe{
     width:100%;
     height:92vh;
     border:none;
-}
-
-button{
-    padding:8px 12px;
-    background:var(--accent);
-    border:none;
-    color:white;
-    border-radius:6px;
-    cursor:pointer;
 }
 </style>
 </head>
@@ -136,82 +128,89 @@ button{
     </div>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
 <div class="main">
 
 <!-- HOME -->
 <div id="home" class="page active">
+
     <div class="header">
-        <h2>🚀 E-Commerce Big Data Pipeline</h2>
+        <h2>🚀 E-Commerce Big Data Analytics Pipeline</h2>
     </div>
 
     <div class="home">
+
+        <!-- PROJECT OVERVIEW -->
+        <div class="card">
+            <h3>📌 Project Overview</h3>
+            <p>
+                This project implements an end-to-end Big Data Analytics Pipeline for processing large-scale
+                e-commerce transaction data using Apache Kafka, Spark, Airflow, PostgreSQL, Docker, and Flask.
+                It processes over 2 million records and transforms raw data into meaningful business insights.
+            </p>
+        </div>
+
+        <!-- PIPELINE -->
+        <div class="card">
+            <h3>🔄 Project Pipeline</h3>
+            <p>
+                Data Ingestion → Kafka Streaming → Spark ETL Processing → Airflow Orchestration →
+                PostgreSQL Storage → Flask API → Dashboard Visualization
+            </p>
+        </div>
+
+        <!-- MODULES -->
+        <div class="card">
+            <h3>📦 Project Modules</h3>
+            <p>
+                Overview • Category Analysis • Geography Analysis • Payment Analysis • Trends Analysis • Customer Insights
+            </p>
+        </div>
+
+        <!-- KPI CARDS -->
         <div class="grid">
             <div class="card">₹583 Cr Revenue</div>
             <div class="card">2M+ Records</div>
             <div class="card">441K Customers</div>
             <div class="card">30+ ETL Rules</div>
         </div>
+
     </div>
 </div>
 
 <!-- OVERVIEW -->
 <div id="overview" class="page">
-    <div class="header">
-        <h2>📊 Overview Report</h2>
-        <button onclick="show('home')">⬅ Back</button>
-    </div>
-
+    <div class="header"><h2>📊 Overview Report</h2></div>
     <iframe src="screenshots/Overview%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
 <!-- CATEGORY -->
 <div id="category" class="page">
-    <div class="header">
-        <h2>🛒 Category Report</h2>
-        <button onclick="show('home')">⬅ Back</button>
-    </div>
-
+    <div class="header"><h2>🛒 Category Report</h2></div>
     <iframe src="screenshots/Category%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
 <!-- CUSTOMER -->
 <div id="customer" class="page">
-    <div class="header">
-        <h2>👥 Customer Report</h2>
-        <button onclick="show('home')">⬅ Back</button>
-    </div>
-
+    <div class="header"><h2>👥 Customer Report</h2></div>
     <iframe src="screenshots/Customer%20Insights%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
 <!-- GEO -->
 <div id="geo" class="page">
-    <div class="header">
-        <h2>🌍 Geography Report</h2>
-        <button onclick="show('home')">⬅ Back</button>
-    </div>
-
+    <div class="header"><h2>🌍 Geography Report</h2></div>
     <iframe src="screenshots/Geographic%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
 <!-- PAYMENT -->
 <div id="payment" class="page">
-    <div class="header">
-        <h2>💳 Payment Report</h2>
-        <button onclick="show('home')">⬅ Back</button>
-    </div>
-
+    <div class="header"><h2>💳 Payment Report</h2></div>
     <iframe src="screenshots/Payment%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
 <!-- TREND -->
 <div id="trend" class="page">
-    <div class="header">
-        <h2>📈 Trend Report</h2>
-        <button onclick="show('home')">⬅ Back</button>
-    </div>
-
+    <div class="header"><h2>📈 Trend Report</h2></div>
     <iframe src="screenshots/Time%20Series%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
