@@ -6,97 +6,116 @@
 <title>E-Commerce Analytics Dashboard</title>
 
 <style>
-    :root{
-        --bg:#0b1220;
-        --panel:#111a2e;
-        --card:#16223a;
-        --text:#e5e7eb;
-        --accent:#3b82f6;
-    }
+:root{
+    --bg:#0b1220;
+    --panel:#111a2e;
+    --card:#16223a;
+    --text:#e5e7eb;
+    --accent:#3b82f6;
+}
 
-    body{
-        margin:0;
-        font-family:Arial;
-        background:var(--bg);
-        color:var(--text);
-        display:flex;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
 
-    /* SIDEBAR */
-    .sidebar{
-        width:240px;
-        background:var(--panel);
-        height:100vh;
-        padding:20px;
-        position:fixed;
-    }
+body{
+    background:var(--bg);
+    color:var(--text);
+    display:flex;
+}
 
-    .logo{
-        font-size:20px;
-        font-weight:bold;
-        margin-bottom:20px;
-        color:var(--accent);
-    }
+/* SIDEBAR */
+.sidebar{
+    width:240px;
+    height:100vh;
+    background:var(--panel);
+    padding:20px;
+    position:fixed;
+}
 
-    .nav button{
-        width:100%;
-        padding:12px;
-        margin:5px 0;
-        background:transparent;
-        border:none;
-        color:var(--text);
-        text-align:left;
-        cursor:pointer;
-        border-radius:6px;
-        transition:0.3s;
-    }
+.logo{
+    font-size:18px;
+    font-weight:bold;
+    color:var(--accent);
+    margin-bottom:20px;
+}
 
-    .nav button:hover{
-        background:var(--card);
-    }
+.nav button{
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    background:transparent;
+    border:none;
+    color:var(--text);
+    text-align:left;
+    cursor:pointer;
+    border-radius:6px;
+}
 
-    /* MAIN */
-    .main{
-        margin-left:260px;
-        padding:20px;
-        width:100%;
-    }
+.nav button:hover{
+    background:var(--card);
+}
 
-    .header{
-        background:var(--panel);
-        padding:20px;
-        border-radius:10px;
-        margin-bottom:20px;
-    }
+/* MAIN */
+.main{
+    margin-left:260px;
+    width:100%;
+}
 
-    .grid{
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-        gap:15px;
-    }
+/* PAGES */
+.page{
+    display:none;
+    height:100vh;
+}
 
-    .card{
-        background:var(--card);
-        padding:15px;
-        border-radius:10px;
-        box-shadow:0 2px 10px rgba(0,0,0,0.3);
-    }
+.active{
+    display:block;
+}
 
-    iframe{
-        width:100%;
-        height:600px;
-        border:none;
-        border-radius:10px;
-    }
+/* HEADER */
+.header{
+    background:var(--panel);
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 
-    .page{ display:none; }
-    .active{ display:block; }
+/* HOME CARDS */
+.home{
+    padding:20px;
+}
 
-    .kpi{
-        font-size:22px;
-        font-weight:bold;
-        color:var(--accent);
-    }
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+.card{
+    background:var(--card);
+    padding:15px;
+    border-radius:10px;
+}
+
+/* PDF VIEWER */
+iframe{
+    width:100%;
+    height:92vh;
+    border:none;
+}
+
+button{
+    padding:8px 12px;
+    background:var(--accent);
+    border:none;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+}
 </style>
 </head>
 
@@ -104,7 +123,7 @@
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-    <div class="logo">📊 E-Commerce Analytics</div>
+    <div class="logo">📊 Analytics Dashboard</div>
 
     <div class="nav">
         <button onclick="show('home')">🏠 Home</button>
@@ -117,72 +136,82 @@
     </div>
 </div>
 
-<!-- MAIN -->
+<!-- MAIN CONTENT -->
 <div class="main">
 
 <!-- HOME -->
 <div id="home" class="page active">
     <div class="header">
-        <h1>🚀 Big Data E-Commerce Pipeline</h1>
-        <p>Kafka • Spark • Airflow • PostgreSQL • Flask</p>
+        <h2>🚀 E-Commerce Big Data Pipeline</h2>
     </div>
 
-    <div class="grid">
-        <div class="card">
-            <div class="kpi">2M+</div>
-            <p>Records Processed</p>
-        </div>
-
-        <div class="card">
-            <div class="kpi">₹583 Cr</div>
-            <p>Total Revenue</p>
-        </div>
-
-        <div class="card">
-            <div class="kpi">441K</div>
-            <p>Customers</p>
-        </div>
-
-        <div class="card">
-            <div class="kpi">30+</div>
-            <p>ETL Rules</p>
+    <div class="home">
+        <div class="grid">
+            <div class="card">₹583 Cr Revenue</div>
+            <div class="card">2M+ Records</div>
+            <div class="card">441K Customers</div>
+            <div class="card">30+ ETL Rules</div>
         </div>
     </div>
 </div>
 
 <!-- OVERVIEW -->
 <div id="overview" class="page">
-    <h2>📊 Overview Analysis</h2>
+    <div class="header">
+        <h2>📊 Overview Report</h2>
+        <button onclick="show('home')">⬅ Back</button>
+    </div>
+
     <iframe src="screenshots/Overview%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
 <!-- CATEGORY -->
 <div id="category" class="page">
-    <h2>🛒 Category Analysis</h2>
+    <div class="header">
+        <h2>🛒 Category Report</h2>
+        <button onclick="show('home')">⬅ Back</button>
+    </div>
+
     <iframe src="screenshots/Category%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
 <!-- CUSTOMER -->
 <div id="customer" class="page">
-    <h2>👥 Customer Insights</h2>
+    <div class="header">
+        <h2>👥 Customer Report</h2>
+        <button onclick="show('home')">⬅ Back</button>
+    </div>
+
     <iframe src="screenshots/Customer%20Insights%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
 <!-- GEO -->
 <div id="geo" class="page">
-    <h2>🌍 Geography Analysis</h2>
+    <div class="header">
+        <h2>🌍 Geography Report</h2>
+        <button onclick="show('home')">⬅ Back</button>
+    </div>
+
     <iframe src="screenshots/Geographic%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
 <!-- PAYMENT -->
 <div id="payment" class="page">
-    <h2>💳 Payment Analysis</h2>
+    <div class="header">
+        <h2>💳 Payment Report</h2>
+        <button onclick="show('home')">⬅ Back</button>
+    </div>
+
     <iframe src="screenshots/Payment%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
 <!-- TREND -->
 <div id="trend" class="page">
-    <h2>📈 Time Series Trends</h2>
+    <div class="header">
+        <h2>📈 Trend Report</h2>
+        <button onclick="show('home')">⬅ Back</button>
+    </div>
+
     <iframe src="screenshots/Time%20Series%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
 </div>
 
