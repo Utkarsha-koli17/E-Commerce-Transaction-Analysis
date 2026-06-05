@@ -3,229 +3,267 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-Commerce Big Data Analytics Pipeline</title>
+<title>E-Commerce Big Data Story</title>
 
 <style>
 :root{
-    --bg:#0d1117;
-    --card:#161b22;
-    --text:#c9d1d9;
-    --muted:#8b949e;
-    --accent:#58a6ff;
-    --border:#30363d;
+  --bg:#0b0f17;
+  --glass:rgba(255,255,255,0.06);
+  --text:#e6edf3;
+  --muted:#8b949e;
+  --accent:#58a6ff;
+  --border:rgba(255,255,255,0.08);
 }
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:system-ui;
-    scroll-behavior:smooth;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  scroll-behavior:smooth;
 }
 
 body{
-    background:var(--bg);
-    color:var(--text);
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
 }
 
-/* NAVBAR */
+/* BACKGROUND PARALLAX LAYER */
+.bg{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(88,166,255,0.15), transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(56,189,248,0.12), transparent 40%);
+  z-index:-1;
+  transform:translateZ(0);
+}
+
+/* NAV */
 nav{
-    position:fixed;
-    top:0;
-    width:100%;
-    background:rgba(13,17,23,0.9);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--border);
-    display:flex;
-    justify-content:center;
-    gap:15px;
-    padding:15px;
-    z-index:100;
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  padding:14px;
+  background:rgba(0,0,0,0.3);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  z-index:100;
 }
 
 nav a{
-    color:var(--text);
-    text-decoration:none;
-    padding:8px 12px;
-    border-radius:6px;
-    transition:0.3s;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+  transition:0.3s;
 }
 
 nav a:hover{
-    background:var(--card);
+  color:white;
 }
 
 /* SECTIONS */
 section{
-    min-height:100vh;
-    padding:100px 20px;
-    max-width:1000px;
-    margin:auto;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    opacity:0;
-    transform:translateY(30px);
-    animation:fadeUp 0.8s forwards;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:120px 20px;
+  opacity:0;
+  transform:translateY(60px) scale(0.96);
+  transition:all 1s ease;
 }
 
-/* HEADINGS */
-h1,h2{
-    color:white;
-    margin-bottom:15px;
-}
-
-p{
-    color:var(--muted);
-    line-height:1.7;
-}
-
-/* CARD */
-.card{
-    background:var(--card);
-    border:1px solid var(--border);
-    padding:20px;
-    border-radius:12px;
-    margin-top:15px;
-}
-
-/* GRID */
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:15px;
-    margin-top:20px;
-}
-
-.metric{
-    background:var(--card);
-    border:1px solid var(--border);
-    padding:20px;
-    border-radius:12px;
-    text-align:center;
-}
-
-.metric h3{
-    color:var(--accent);
-    font-size:1.8rem;
-}
-
-/* IFRAME */
-iframe{
-    width:100%;
-    height:80vh;
-    border:none;
-    border-radius:12px;
-    margin-top:20px;
-    background:white;
+section.show{
+  opacity:1;
+  transform:translateY(0) scale(1);
 }
 
 /* HERO */
-.hero{
-    text-align:center;
+.hero h1{
+  font-size:3rem;
+  letter-spacing:-1px;
+  background:linear-gradient(90deg,#58a6ff,#7c3aed);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
-/* ANIMATION */
-@keyframes fadeUp{
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+.hero p{
+  max-width:700px;
+  color:var(--muted);
+  margin-top:15px;
+  line-height:1.6;
+}
+
+/* CARDS */
+.glass{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  margin-top:20px;
+  width:80%;
+  max-width:900px;
+  backdrop-filter:blur(12px);
+  transition:0.4s;
+}
+
+.glass:hover{
+  transform:scale(1.02);
+}
+
+/* METRICS */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+  width:80%;
+  max-width:900px;
+  margin-top:20px;
+}
+
+.metric{
+  background:var(--glass);
+  border:1px solid var(--border);
+  padding:20px;
+  border-radius:16px;
+}
+
+.metric h2{
+  color:var(--accent);
+  font-size:2rem;
+}
+
+/* PIPELINE */
+.flow{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+}
+
+.step{
+  padding:10px 15px;
+  border-radius:999px;
+  background:var(--glass);
+  border:1px solid var(--border);
+}
+
+/* PDF */
+iframe{
+  width:90%;
+  height:80vh;
+  border:none;
+  border-radius:16px;
+  margin-top:20px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
 }
 </style>
 </head>
 
 <body>
 
+<div class="bg"></div>
+
 <!-- NAV -->
 <nav>
-    <a href="#home">Home</a>
-    <a href="#overview">Overview</a>
-    <a href="#metrics">Metrics</a>
-    <a href="#pipeline">Pipeline</a>
-    <a href="#reports">Reports</a>
+  <a href="#home">Home</a>
+  <a href="#story">Story</a>
+  <a href="#pipeline">Pipeline</a>
+  <a href="#metrics">Metrics</a>
+  <a href="#reports">Reports</a>
 </nav>
 
-<!-- HOME -->
-<section id="home" class="hero">
-    <h1>🚀 E-Commerce Big Data Analytics Pipeline</h1>
-    <p>
-        End-to-end distributed data engineering system using Kafka, Spark, Airflow,
-        PostgreSQL, Flask, and Docker to process large-scale e-commerce transactions.
-    </p>
-
-    <div class="grid">
-        <div class="metric"><h3>1.1M+</h3><p>Records Processed</p></div>
-        <div class="metric"><h3>₹583 Cr</h3><p>Total Revenue</p></div>
-        <div class="metric"><h3>441K+</h3><p>Customers</p></div>
-        <div class="metric"><h3>30+</h3><p>ETL Rules</p></div>
-    </div>
+<!-- HERO -->
+<section id="home" class="hero show">
+  <h1>E-Commerce Big Data Pipeline</h1>
+  <p>
+    A production-grade distributed data engineering system built using Kafka, Spark, Airflow,
+    PostgreSQL, and Flask that processes millions of transactions into business insights.
+  </p>
 </section>
 
-<!-- OVERVIEW -->
-<section id="overview">
-    <h2>📌 Project Overview</h2>
-    <div class="card">
-        <p>
-            This project processes massive e-commerce transaction datasets in real time.
-            It converts raw streaming data into structured analytics using distributed systems
-            and presents insights through a Flask-based reporting dashboard.
-        </p>
-    </div>
+<!-- STORY -->
+<section id="story">
+  <h2>📌 The Story</h2>
+
+  <div class="glass">
+    We started with raw e-commerce data containing millions of transactions.
+    The goal was to transform this noisy data into meaningful insights using a scalable big data architecture.
+  </div>
+
+  <div class="glass">
+    Every transaction flows through a distributed pipeline ensuring reliability, speed, and accuracy.
+  </div>
 </section>
 
 <!-- PIPELINE -->
 <section id="pipeline">
-    <h2>🔄 Data Pipeline Flow</h2>
-    <div class="card">
-        <p>
-            Raw CSV Data → Apache Kafka → Spark ETL Processing → Airflow Orchestration →
-            PostgreSQL Database → Flask API → Analytics Dashboard
-        </p>
-    </div>
+  <h2>🔄 Data Pipeline Journey</h2>
 
-    <div class="card">
-        <p>
-            This pipeline ensures real-time ingestion, fault tolerance, scalability,
-            and structured transformation of high-volume datasets.
-        </p>
-    </div>
+  <div class="flow">
+    <div class="step">Raw Data</div>
+    <div class="step">Kafka</div>
+    <div class="step">Spark ETL</div>
+    <div class="step">Airflow</div>
+    <div class="step">PostgreSQL</div>
+    <div class="step">Flask API</div>
+    <div class="step">Dashboard</div>
+  </div>
+
+  <div class="glass">
+    This pipeline ensures real-time ingestion, distributed processing, fault tolerance, and scalable analytics.
+  </div>
+</section>
+
+<!-- METRICS -->
+<section id="metrics">
+  <h2>📊 Key Metrics</h2>
+
+  <div class="grid">
+    <div class="metric"><h2>1.1M+</h2><p>Records</p></div>
+    <div class="metric"><h2>₹583 Cr</h2><p>Revenue</p></div>
+    <div class="metric"><h2>441K+</h2><p>Customers</p></div>
+    <div class="metric"><h2>30+</h2><p>ETL Rules</p></div>
+  </div>
 </section>
 
 <!-- REPORTS -->
 <section id="reports">
-    <h2>📄 Analytics Reports</h2>
+  <h2>📄 Analytics Reports</h2>
 
-    <div class="card">
-        <h3>Overview Report</h3>
-        <iframe src="screenshots/Overview%20-%20E-Commerce%20Analytics.pdf"></iframe>
-    </div>
+  <iframe src="screenshots/Overview%20-%20E-Commerce%20Analytics.pdf"></iframe>
+  <iframe src="screenshots/Category%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
+  <iframe src="screenshots/Customer%20Insights%20-%20E-Commerce%20Analytics.pdf"></iframe>
+  <iframe src="screenshots/Geographic%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
+  <iframe src="screenshots/Payment%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
+  <iframe src="screenshots/Time%20Series%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
 
-    <div class="card">
-        <h3>Category Analysis</h3>
-        <iframe src="screenshots/Category%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
-    </div>
-
-    <div class="card">
-        <h3>Customer Insights</h3>
-        <iframe src="screenshots/Customer%20Insights%20-%20E-Commerce%20Analytics.pdf"></iframe>
-    </div>
-
-    <div class="card">
-        <h3>Geographic Analysis</h3>
-        <iframe src="screenshots/Geographic%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
-    </div>
-
-    <div class="card">
-        <h3>Payment Analysis</h3>
-        <iframe src="screenshots/Payment%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
-    </div>
-
-    <div class="card">
-        <h3>Time Series Analysis</h3>
-        <iframe src="screenshots/Time%20Series%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
-    </div>
 </section>
+
+<script>
+// Scroll animation (Apple-style reveal)
+const sections = document.querySelectorAll("section");
+
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("show");
+    }
+  });
+},{threshold:0.2});
+
+sections.forEach(s=>observer.observe(s));
+</script>
 
 </body>
 </html>
