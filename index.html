@@ -15,6 +15,7 @@
   --accent2:#7c3aed;
   --border:rgba(255,255,255,0.08);
   --success:#2ea043;
+  --glow:rgba(88,166,255,0.3);
 }
 
 *{
@@ -29,6 +30,54 @@ body{
   background:var(--bg);
   color:var(--text);
   line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* ANIMATED BACKGROUND */
+.bg-animation{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:-1;
+  background:linear-gradient(45deg,#0b0f17,#1a1f2e,#0b0f17);
+  background-size:400% 400%;
+  animation:gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* PARTICLES */
+.particles{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:-1;
+  overflow:hidden;
+}
+
+.particle{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:var(--accent);
+  border-radius:50%;
+  animation:float 20s infinite;
+  opacity:0.3;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(100vh) translateX(0);opacity:0;}
+  10%{opacity:0.3;}
+  90%{opacity:0.3;}
+  100%{transform:translateY(-100vh) translateX(100px);opacity:0;}
 }
 
 /* NAV */
@@ -40,22 +89,44 @@ nav{
   justify-content:center;
   gap:18px;
   padding:12px;
-  background:rgba(0,0,0,0.4);
+  background:rgba(0,0,0,0.6);
   backdrop-filter:blur(14px);
   border-bottom:1px solid var(--border);
   z-index:1000;
   flex-wrap:wrap;
+  transition:all 0.3s;
+}
+
+nav.scrolled{
+  padding:8px;
+  background:rgba(0,0,0,0.8);
 }
 
 nav a{
   color:var(--muted);
   text-decoration:none;
   font-size:14px;
-  transition:0.3s;
+  transition:all 0.3s;
+  position:relative;
+}
+
+nav a::after{
+  content:'';
+  position:absolute;
+  bottom:-5px;
+  left:0;
+  width:0;
+  height:2px;
+  background:var(--accent);
+  transition:width 0.3s;
 }
 
 nav a:hover{
   color:white;
+}
+
+nav a:hover::after{
+  width:100%;
 }
 
 /* SECTIONS */
@@ -80,11 +151,17 @@ section.show{
 
 /* HERO */
 h1{
-  font-size:3rem;
-  background:linear-gradient(90deg,#58a6ff,#7c3aed);
+  font-size:3.5rem;
+  background:linear-gradient(90deg,#58a6ff,#7c3aed,#58a6ff);
+  background-size:200% auto;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   margin-bottom:20px;
+  animation:shine 3s linear infinite;
+}
+
+@keyframes shine{
+  to{background-position:200% center;}
 }
 
 .subtitle{
@@ -93,6 +170,12 @@ h1{
   margin-top:10px;
   line-height:1.6;
   font-size:1.1rem;
+  animation:fadeInUp 1s ease 0.3s backwards;
+}
+
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
 }
 
 /* GLASS GRID */
@@ -108,22 +191,45 @@ h1{
 .glass-card{
   background:var(--card);
   border:1px solid var(--border);
-  padding:20px;
+  padding:25px;
   border-radius:16px;
   backdrop-filter:blur(12px);
-  transition:0.3s;
+  transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position:relative;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.glass-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg,transparent,rgba(88,166,255,0.1),transparent);
+  transition:left 0.5s;
+}
+
+.glass-card:hover::before{
+  left:100%;
 }
 
 .glass-card:hover{
-  transform:translateY(-5px);
+  transform:translateY(-10px) scale(1.05);
   border-color:var(--accent);
+  box-shadow:0 10px 40px var(--glow);
 }
 
 .glass-card h2{
   color:var(--accent);
-  font-size:2rem;
+  font-size:2.5rem;
   margin-bottom:8px;
+  transition:all 0.3s;
+}
+
+.glass-card:hover h2{
+  transform:scale(1.1);
 }
 
 .glass-card p{
@@ -136,36 +242,60 @@ h1{
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
-  gap:10px;
-  margin-top:20px;
+  gap:15px;
+  margin-top:30px;
   max-width:1000px;
 }
 
 .step{
-  padding:10px 14px;
+  padding:12px 20px;
   border-radius:999px;
   background:var(--card);
   border:1px solid var(--border);
-  font-size:13px;
-  transition:0.3s;
+  font-size:14px;
+  transition:all 0.4s;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+
+.step::after{
+  content:'→';
+  position:absolute;
+  right:-20px;
+  opacity:0;
+  transition:all 0.3s;
 }
 
 .step:hover{
-  transform:scale(1.1);
+  transform:scale(1.15);
   border-color:var(--accent);
+  background:rgba(88,166,255,0.1);
+  box-shadow:0 5px 20px var(--glow);
+}
+
+.step:hover::after{
+  right:10px;
+  opacity:1;
 }
 
 /* CARDS */
 .card{
   background:var(--card);
   border:1px solid var(--border);
-  padding:25px;
+  padding:30px;
   border-radius:14px;
-  margin-top:15px;
+  margin-top:20px;
   width:85%;
   max-width:1000px;
   backdrop-filter:blur(10px);
   text-align:left;
+  transition:all 0.3s;
+}
+
+.card:hover{
+  border-color:var(--accent);
+  box-shadow:0 5px 30px rgba(88,166,255,0.1);
 }
 
 .card h3{
@@ -187,19 +317,46 @@ h1{
 .tech-item{
   background:var(--card);
   border:1px solid var(--border);
-  padding:20px;
+  padding:25px;
   border-radius:12px;
-  transition:0.3s;
+  transition:all 0.4s;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+
+.tech-item::before{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:0;
+  height:0;
+  border-radius:50%;
+  background:rgba(88,166,255,0.1);
+  transform:translate(-50%,-50%);
+  transition:all 0.5s;
+}
+
+.tech-item:hover::before{
+  width:300px;
+  height:300px;
 }
 
 .tech-item:hover{
   border-color:var(--accent);
-  transform:translateY(-3px);
+  transform:translateY(-5px) rotate(2deg);
+  box-shadow:0 10px 30px var(--glow);
 }
 
 .tech-item .icon{
-  font-size:2rem;
+  font-size:2.5rem;
   margin-bottom:10px;
+  transition:all 0.3s;
+}
+
+.tech-item:hover .icon{
+  transform:scale(1.2) rotate(10deg);
 }
 
 .tech-item h4{
@@ -211,39 +368,6 @@ h1{
 .tech-item p{
   color:var(--muted);
   font-size:0.85rem;
-}
-
-/* TEAM */
-.team-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:15px;
-  width:85%;
-  max-width:1000px;
-  margin-top:25px;
-}
-
-.team-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  padding:20px;
-  border-radius:14px;
-  transition:0.3s;
-}
-
-.team-card:hover{
-  border-color:var(--accent);
-  transform:translateY(-3px);
-}
-
-.team-card h4{
-  color:var(--accent);
-  margin-bottom:8px;
-}
-
-.team-card p{
-  color:var(--muted);
-  font-size:0.9rem;
 }
 
 /* FEATURES */
@@ -259,14 +383,17 @@ h1{
 .feature-card{
   background:var(--card);
   border:1px solid var(--border);
-  padding:20px;
+  padding:25px;
   border-radius:14px;
   text-align:left;
-  transition:0.3s;
+  transition:all 0.4s;
+  cursor:pointer;
 }
 
 .feature-card:hover{
   border-color:var(--accent);
+  transform:translateY(-5px);
+  box-shadow:0 10px 30px var(--glow);
 }
 
 .feature-card h4{
@@ -295,6 +422,12 @@ h1{
   overflow-x:auto;
   white-space:pre;
   text-align:left;
+  transition:all 0.3s;
+}
+
+.arch-diagram:hover{
+  border-color:var(--accent);
+  box-shadow:0 5px 30px var(--glow);
 }
 
 /* PDF */
@@ -305,6 +438,11 @@ iframe{
   border-radius:14px;
   margin-top:15px;
   box-shadow:0 10px 40px rgba(0,0,0,0.4);
+  transition:all 0.3s;
+}
+
+iframe:hover{
+  box-shadow:0 15px 50px rgba(88,166,255,0.3);
 }
 
 /* TITLE */
@@ -323,12 +461,32 @@ h2{
 }
 
 .btn{
-  padding:12px 24px;
+  padding:14px 28px;
   border-radius:8px;
   text-decoration:none;
   font-weight:600;
-  transition:0.3s;
+  transition:all 0.3s;
   border:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+}
+
+.btn::before{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:0;
+  height:0;
+  border-radius:50%;
+  background:rgba(255,255,255,0.1);
+  transform:translate(-50%,-50%);
+  transition:all 0.5s;
+}
+
+.btn:hover::before{
+  width:300px;
+  height:300px;
 }
 
 .btn-primary{
@@ -337,8 +495,8 @@ h2{
 }
 
 .btn-primary:hover{
-  transform:translateY(-2px);
-  box-shadow:0 5px 20px rgba(88,166,255,0.3);
+  transform:translateY(-3px);
+  box-shadow:0 10px 30px var(--glow);
 }
 
 .btn-secondary{
@@ -348,6 +506,7 @@ h2{
 
 .btn-secondary:hover{
   border-color:var(--accent);
+  transform:translateY(-3px);
 }
 
 /* FOOTER */
@@ -356,11 +515,28 @@ footer{
   text-align:center;
   border-top:1px solid var(--border);
   color:var(--muted);
+  background:rgba(0,0,0,0.3);
 }
 
 footer a{
   color:var(--accent);
   text-decoration:none;
+  transition:all 0.3s;
+}
+
+footer a:hover{
+  text-decoration:underline;
+}
+
+/* SCROLL PROGRESS */
+.scroll-progress{
+  position:fixed;
+  top:0;
+  left:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  z-index:9999;
+  transition:width 0.1s;
 }
 
 /* RESPONSIVE */
@@ -369,24 +545,31 @@ footer a{
   h2{font-size:1.5rem;}
   nav{gap:10px;padding:10px;}
   nav a{font-size:12px;}
-  .glass-grid,.tech-grid,.team-grid,.features-grid{
+  .glass-grid,.tech-grid,.features-grid{
     grid-template-columns:1fr;
   }
+  .glass-card h2{font-size:2rem;}
 }
 </style>
 </head>
 
 <body>
 
+<!-- ANIMATED BACKGROUND -->
+<div class="bg-animation"></div>
+<div class="particles" id="particles"></div>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="progress"></div>
+
 <!-- NAV -->
-<nav>
+<nav id="nav">
   <a href="#home">Home</a>
   <a href="#overview">Overview</a>
   <a href="#pipeline">Pipeline</a>
   <a href="#metrics">Metrics</a>
   <a href="#tech">Tech Stack</a>
   <a href="#features">Features</a>
-  <a href="#team">Team</a>
   <a href="#reports">Reports</a>
 </nav>
 
@@ -412,15 +595,6 @@ footer a{
     <p>This project implements a complete, production-grade Big Data Analytics Pipeline for processing and analyzing large-scale e-commerce transaction data. The system combines real-time streaming, distributed ETL processing, workflow orchestration, data warehousing, and interactive dashboard visualization using modern data engineering technologies.</p>
     <br>
     <p>The pipeline ingests raw transaction data (2 Million+ records), processes and cleans it in real-time using Apache Spark Structured Streaming with 30+ data quality rules, stores it in a structured PostgreSQL database, and presents actionable business insights through a 6-page interactive Flask dashboard.</p>
-  </div>
-
-  <div class="card">
-    <h3>Course Information</h3>
-    <p><strong>Course:</strong> PG-DBDA (Post Graduate Diploma in Big Data Analytics)</p>
-    <p><strong>Module:</strong> Statistics & Data Insights</p>
-    <p><strong>Institution:</strong> C-DAC Kharghar, Navi Mumbai</p>
-    <p><strong>Dataset:</strong> 2 Million e-commerce transactions (~500MB CSV, 30 columns)</p>
-    <p><strong>Date Range:</strong> January 2022 – December 2024</p>
   </div>
 </section>
 
@@ -470,32 +644,32 @@ footer a{
 
   <div class="glass-grid">
     <div class="glass-card">
-      <h2>1.1M+</h2>
+      <h2 class="counter" data-target="1100000">0</h2>
       <p>Records Processed</p>
     </div>
 
     <div class="glass-card">
-      <h2>₹583 Cr</h2>
+      <h2>₹<span class="counter" data-target="583">0</span> Cr</h2>
       <p>Total Revenue Analyzed</p>
     </div>
 
     <div class="glass-card">
-      <h2>441K+</h2>
+      <h2 class="counter" data-target="441000">0</h2>
       <p>Unique Customers</p>
     </div>
 
     <div class="glass-card">
-      <h2>30+</h2>
+      <h2 class="counter" data-target="30">0</h2>
       <p>Data Quality Rules</p>
     </div>
 
     <div class="glass-card">
-      <h2>6</h2>
+      <h2 class="counter" data-target="6">0</h2>
       <p>Dashboard Pages</p>
     </div>
 
     <div class="glass-card">
-      <h2>18</h2>
+      <h2 class="counter" data-target="18">0</h2>
       <p>REST API Endpoints</p>
     </div>
   </div>
@@ -593,48 +767,6 @@ footer a{
   </div>
 </section>
 
-<!-- TEAM -->
-<section id="team">
-  <h2>👨‍💻 Team & Credits</h2>
-
-  <div class="card">
-    <h3>Group 12 – Big Data Analytics Project</h3>
-    <p>PG-DBDA, C-DAC Kharghar, Navi Mumbai</p>
-  </div>
-
-  <div class="team-grid">
-    <div class="team-card">
-      <h4>Piyush Shinde</h4>
-      <p>Project Lead & Full Stack Data Engineer</p>
-    </div>
-
-    <div class="team-card">
-      <h4>Payal Waghela</h4>
-      <p>Data Analyst & Dashboard Developer</p>
-    </div>
-
-    <div class="team-card">
-      <h4>Abhishek Mohile</h4>
-      <p>Big Data Engineer (Spark & Kafka)</p>
-    </div>
-
-    <div class="team-card">
-      <h4>Utkarsha Koli</h4>
-      <p>Database Administrator (PostgreSQL)</p>
-    </div>
-
-    <div class="team-card">
-      <h4>Lokesh Bhoge</h4>
-      <p>DevOps & Cloud Engineer (Docker/Airflow)</p>
-    </div>
-
-    <div class="team-card">
-      <h4>Simran Gulakari</h4>
-      <p>QA & Documentation Specialist</p>
-    </div>
-  </div>
-</section>
-
 <!-- REPORTS -->
 <section id="reports">
   <h2>📄 Analytics Dashboard Reports</h2>
@@ -672,25 +804,73 @@ footer a{
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2024 Group 12 | PG-DBDA, C-DAC Kharghar</p>
+  <p>© 2024 Group 12 | Big Data Analytics Project</p>
   <p>Developed for educational purposes | <a href="https://github.com/piyush9786/ecommerce-bigdata-pipeline">View on GitHub</a></p>
 </footer>
 
 <script>
-// scroll animation
+// Create particles
+const particlesContainer = document.getElementById('particles');
+for(let i = 0; i < 50; i++){
+  const particle = document.createElement('div');
+  particle.className = 'particle';
+  particle.style.left = Math.random() * 100 + '%';
+  particle.style.animationDelay = Math.random() * 20 + 's';
+  particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+  particlesContainer.appendChild(particle);
+}
+
+// Scroll progress
+window.addEventListener('scroll', () => {
+  const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = (winScroll / height) * 100;
+  document.getElementById('progress').style.width = scrolled + '%';
+  
+  // Nav effect
+  const nav = document.getElementById('nav');
+  if(winScroll > 100){
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+
+// Scroll animation
 const sections = document.querySelectorAll("section");
 
 const observer = new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting){
       entry.target.classList.add("show");
+      
+      // Trigger counters
+      const counters = entry.target.querySelectorAll('.counter');
+      counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const duration = 2000;
+        const increment = target / (duration / 16);
+        let current = 0;
+        
+        const updateCounter = () => {
+          current += increment;
+          if(current < target){
+            counter.innerText = Math.ceil(current).toLocaleString();
+            requestAnimationFrame(updateCounter);
+          } else {
+            counter.innerText = target.toLocaleString();
+          }
+        };
+        
+        updateCounter();
+      });
     }
   });
 },{threshold:0.15});
 
 sections.forEach(s=>observer.observe(s));
 
-// smooth scroll for nav links
+// Smooth scroll for nav links
 document.querySelectorAll('nav a').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
     e.preventDefault();
@@ -698,6 +878,26 @@ document.querySelectorAll('nav a').forEach(anchor => {
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
     }
+  });
+});
+
+// Add ripple effect to buttons
+document.querySelectorAll('.btn, .glass-card, .tech-item, .feature-card, .step').forEach(element => {
+  element.addEventListener('click', function(e) {
+    const ripple = document.createElement('span');
+    const rect = this.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+    
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    ripple.classList.add('ripple');
+    
+    this.appendChild(ripple);
+    
+    setTimeout(() => ripple.remove(), 600);
   });
 });
 </script>
