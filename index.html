@@ -3,225 +3,215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-Commerce Analytics Dashboard</title>
+<title>E-Commerce Big Data Project</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root{
-    --bg:#0b1220;
-    --panel:#111a2e;
-    --card:#16223a;
-    --text:#e5e7eb;
-    --accent:#3b82f6;
+  --bg:#0b1220;
+  --panel:#111a2e;
+  --card:#16223a;
+  --text:#e5e7eb;
+  --accent:#3b82f6;
 }
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial;
+  margin:0;
+  padding:0;
+  font-family:Arial;
+  box-sizing:border-box;
 }
 
 body{
-    background:var(--bg);
-    color:var(--text);
-    display:flex;
+  background:var(--bg);
+  color:var(--text);
 }
 
-/* SIDEBAR */
-.sidebar{
-    width:240px;
-    height:100vh;
-    background:var(--panel);
-    padding:20px;
-    position:fixed;
+/* NAV */
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  background:var(--panel);
+  display:flex;
+  justify-content:space-between;
+  padding:15px 30px;
+  z-index:10;
 }
 
-.logo{
-    font-size:18px;
-    font-weight:bold;
-    color:var(--accent);
-    margin-bottom:20px;
+nav a{
+  color:var(--text);
+  margin:0 10px;
+  text-decoration:none;
 }
 
-.nav button{
-    width:100%;
-    padding:12px;
-    margin:6px 0;
-    background:transparent;
-    border:none;
-    color:var(--text);
-    text-align:left;
-    cursor:pointer;
-    border-radius:6px;
+/* SECTIONS */
+section{
+  padding:80px 20px;
+  max-width:1000px;
+  margin:auto;
 }
 
-.nav button:hover{
-    background:var(--card);
+/* HERO */
+.hero{
+  text-align:center;
+  padding-top:120px;
 }
 
-/* MAIN */
-.main{
-    margin-left:260px;
-    width:100%;
+.hero h1{
+  font-size:32px;
+  color:var(--accent);
 }
 
-/* PAGES */
-.page{
-    display:none;
-    height:100vh;
-}
-
-.active{
-    display:block;
-}
-
-/* HEADER */
-.header{
-    background:var(--panel);
-    padding:15px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-/* HOME */
-.home{
-    padding:25px;
-}
-
+/* CARDS */
 .card{
-    background:var(--card);
-    padding:15px;
-    border-radius:10px;
-    margin-top:15px;
+  background:var(--card);
+  padding:15px;
+  margin:10px 0;
+  border-radius:10px;
 }
 
 .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
 }
 
-/* PDF */
-iframe{
-    width:100%;
-    height:92vh;
-    border:none;
+/* FLOW */
+.flow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+}
+
+.step{
+  background:var(--card);
+  padding:10px 15px;
+  border-radius:8px;
+  border:1px solid #2b3a5a;
+}
+
+/* CHART */
+canvas{
+  background:var(--card);
+  padding:10px;
+  border-radius:10px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <div class="logo">📊 Analytics Dashboard</div>
-
-    <div class="nav">
-        <button onclick="show('home')">🏠 Home</button>
-        <button onclick="show('overview')">📊 Overview</button>
-        <button onclick="show('category')">🛒 Category</button>
-        <button onclick="show('customer')">👥 Customer</button>
-        <button onclick="show('geo')">🌍 Geography</button>
-        <button onclick="show('payment')">💳 Payment</button>
-        <button onclick="show('trend')">📈 Trends</button>
-    </div>
-</div>
-
-<!-- MAIN -->
-<div class="main">
+<!-- NAV -->
+<nav>
+  <div><b>🚀 Big Data Project</b></div>
+  <div>
+    <a href="#home">Home</a>
+    <a href="#flow">Pipeline</a>
+    <a href="#charts">Charts</a>
+    <a href="#insights">Insights</a>
+  </div>
+</nav>
 
 <!-- HOME -->
-<div id="home" class="page active">
+<section id="home" class="hero">
+  <h1>E-Commerce Big Data Analytics Pipeline</h1>
+  <p>Kafka • Spark • Airflow • PostgreSQL • Flask • Docker</p>
 
-    <div class="header">
-        <h2>🚀 E-Commerce Big Data Analytics Pipeline</h2>
-    </div>
+  <div class="card">
+    End-to-end system that processes 2M+ e-commerce transactions
+    and converts raw streaming data into business insights.
+  </div>
+</section>
 
-    <div class="home">
+<!-- FLOW -->
+<section id="flow">
+  <h2>🧠 Project Flow</h2>
 
-        <!-- PROJECT OVERVIEW -->
-        <div class="card">
-            <h3>📌 Project Overview</h3>
-            <p>
-                This project implements an end-to-end Big Data Analytics Pipeline for processing large-scale
-                e-commerce transaction data using Apache Kafka, Spark, Airflow, PostgreSQL, Docker, and Flask.
-                It processes over 2 million records and transforms raw data into meaningful business insights.
-            </p>
-        </div>
+  <div class="flow">
+    <div class="step">📥 Data Source</div>
+    <div class="step">📡 Kafka Streaming</div>
+    <div class="step">⚙ Spark ETL</div>
+    <div class="step">🧭 Airflow DAG</div>
+    <div class="step">🗄 PostgreSQL</div>
+    <div class="step">🌐 Flask API</div>
+    <div class="step">📊 Dashboard</div>
+  </div>
 
-        <!-- PIPELINE -->
-        <div class="card">
-            <h3>🔄 Project Pipeline</h3>
-            <p>
-                Data Ingestion → Kafka Streaming → Spark ETL Processing → Airflow Orchestration →
-                PostgreSQL Storage → Flask API → Dashboard Visualization
-            </p>
-        </div>
+  <div class="card">
+    Raw data is ingested → streamed via Kafka → processed using Spark →
+    orchestrated by Airflow → stored in PostgreSQL → exposed via Flask API →
+    visualized in dashboard.
+  </div>
+</section>
 
-        <!-- MODULES -->
-        <div class="card">
-            <h3>📦 Project Modules</h3>
-            <p>
-                Overview • Category Analysis • Geography Analysis • Payment Analysis • Trends Analysis • Customer Insights
-            </p>
-        </div>
+<!-- CHARTS -->
+<section id="charts">
+  <h2>📊 Analytics Charts</h2>
 
-        <!-- KPI CARDS -->
-        <div class="grid">
-            <div class="card">₹583 Cr Revenue</div>
-            <div class="card">2M+ Records</div>
-            <div class="card">441K Customers</div>
-            <div class="card">30+ ETL Rules</div>
-        </div>
+  <div class="grid">
+    <canvas id="c1"></canvas>
+    <canvas id="c2"></canvas>
+    <canvas id="c3"></canvas>
+  </div>
+</section>
 
-    </div>
-</div>
+<!-- INSIGHTS -->
+<section id="insights">
+  <h2>🎯 Key Insights</h2>
 
-<!-- OVERVIEW -->
-<div id="overview" class="page">
-    <div class="header"><h2>📊 Overview Report</h2></div>
-    <iframe src="screenshots/Overview%20-%20E-Commerce%20Analytics.pdf"></iframe>
-</div>
+  <div class="card">
+    🔥 Electronics is the highest revenue-generating category
+  </div>
 
-<!-- CATEGORY -->
-<div id="category" class="page">
-    <div class="header"><h2>🛒 Category Report</h2></div>
-    <iframe src="screenshots/Category%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
-</div>
+  <div class="card">
+    📍 Maharashtra leads in total sales contribution
+  </div>
 
-<!-- CUSTOMER -->
-<div id="customer" class="page">
-    <div class="header"><h2>👥 Customer Report</h2></div>
-    <iframe src="screenshots/Customer%20Insights%20-%20E-Commerce%20Analytics.pdf"></iframe>
-</div>
+  <div class="card">
+    💳 UPI is the fastest-growing payment method
+  </div>
 
-<!-- GEO -->
-<div id="geo" class="page">
-    <div class="header"><h2>🌍 Geography Report</h2></div>
-    <iframe src="screenshots/Geographic%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
-</div>
-
-<!-- PAYMENT -->
-<div id="payment" class="page">
-    <div class="header"><h2>💳 Payment Report</h2></div>
-    <iframe src="screenshots/Payment%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
-</div>
-
-<!-- TREND -->
-<div id="trend" class="page">
-    <div class="header"><h2>📈 Trend Report</h2></div>
-    <iframe src="screenshots/Time%20Series%20Analysis%20-%20E-Commerce%20Analytics.pdf"></iframe>
-</div>
-
-</div>
+  <div class="card">
+    📈 Revenue shows consistent upward trend across months
+  </div>
+</section>
 
 <script>
-function show(page){
-    let pages = document.querySelectorAll('.page');
-    pages.forEach(p => p.classList.remove('active'));
-    document.getElementById(page).classList.add('active');
-}
+/* Revenue */
+new Chart(document.getElementById("c1"), {
+  type:"bar",
+  data:{
+    labels:["Revenue","Orders","Customers"],
+    datasets:[{
+      data:[583,2000,441]
+    }]
+  }
+});
+
+/* Category */
+new Chart(document.getElementById("c2"), {
+  type:"pie",
+  data:{
+    labels:["Electronics","Fashion","Home"],
+    datasets:[{
+      data:[38,25,37]
+    }]
+  }
+});
+
+/* Trends */
+new Chart(document.getElementById("c3"), {
+  type:"line",
+  data:{
+    labels:["Jan","Feb","Mar","Apr","May","Jun"],
+    datasets:[{
+      data:[50,80,120,200,300,450]
+    }]
+  }
+});
 </script>
 
 </body>
