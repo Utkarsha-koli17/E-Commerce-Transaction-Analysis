@@ -6,9 +6,9 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?logo=postgresql)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker)
 ![Flask](https://img.shields.io/badge/Flask-3.0.0-lightgrey?logo=flask)
-
+## 🌐 Project Website **Live Project Reports & Analytics:** 
+https://piyush9786.github.io/ecommerce-bigdata-pipeline/
 > **End-to-End Real-Time E-Commerce Analytics Pipeline** using Kafka, Spark, Airflow, PostgreSQL, Docker, and Flask.
-
 ---
 
 ## 📌 Project Overview
