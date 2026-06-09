@@ -158,7 +158,7 @@ The Flask backend exposes the following REST API endpoints:
 ### 1. Start the Infrastructure
 ```bash
 # Clone the repository
-git clone https://github.com/piyush9786/Ecommerce-Bigdata-Pipeline.git
+git clone https://github.com/piyush9786/ecommerce-bigdata-pipeline.git
 cd ecommerce-bigdata-pipeline
 
 # Start all Docker containers (Hadoop, Kafka, Spark, Postgres, Airflow)
