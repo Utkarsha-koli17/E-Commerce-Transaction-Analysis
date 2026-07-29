@@ -14,7 +14,6 @@ This guide will help you set up and run the E-Commerce Big Data Analytics Pipeli
 8. [Stopping Services](#stopping-services)
 
 ---
-
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
